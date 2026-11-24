@@ -9,6 +9,8 @@ use App\Models\Cliente;
 use App\Models\Produto;
 use App\Models\Servico;
 use App\Models\OrdemServico;
+use App\Models\Cobranca;
+use App\Models\Lancamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -118,7 +120,75 @@ class VendaController extends Controller
             'data_faturamento'=> now()->toDateString(),
         ]);
 
-        return redirect()->route('vendas.editar', $venda)->with('success', 'Venda faturada com sucesso!');
+        $venda->load('cliente');
+        $vencimento = now()->addDays(30)->toDateString();
+        $forma      = $venda->cond_parcelado ? 'Cartão de Crédito' : ($venda->cond_pix ? 'Pix' : 'Dinheiro');
+        $referencia = 'Venda #' . $venda->id;
+
+        // Cobrança MO
+        if ($request->boolean('nf_mo') && $venda->total > 0) {
+            Cobranca::create([
+                'origem'          => 'Faturar (Venda)',
+                'cliente_id'      => $venda->cliente_id,
+                'venda_id'        => $venda->id,
+                'numero_nf'       => 'MO',
+                'tipo_referencia' => 'Venda',
+                'referencia'      => $referencia,
+                'descricao'       => 'Faturamento ' . $referencia . ' (MO)',
+                'forma_pagamento' => $forma,
+                'data_vencimento' => $vencimento,
+                'valor'           => $venda->total,
+                'status'          => 'Pendente',
+            ]);
+        }
+
+        // Cobrança MT
+        if ($request->boolean('nf_mt') && $venda->total > 0) {
+            Cobranca::create([
+                'origem'          => 'Faturar (Venda)',
+                'cliente_id'      => $venda->cliente_id,
+                'venda_id'        => $venda->id,
+                'numero_nf'       => 'MT',
+                'tipo_referencia' => 'Venda',
+                'referencia'      => $referencia,
+                'descricao'       => 'Faturamento ' . $referencia . ' (MT)',
+                'forma_pagamento' => $forma,
+                'data_vencimento' => $vencimento,
+                'valor'           => $venda->total,
+                'status'          => 'Pendente',
+            ]);
+        }
+
+        // Se nenhuma NF marcada, cria uma cobrança geral
+        if (!$request->boolean('nf_mo') && !$request->boolean('nf_mt') && $venda->total > 0) {
+            Cobranca::create([
+                'origem'          => 'Faturar (Venda)',
+                'cliente_id'      => $venda->cliente_id,
+                'venda_id'        => $venda->id,
+                'tipo_referencia' => 'Venda',
+                'referencia'      => $referencia,
+                'descricao'       => 'Faturamento ' . $referencia,
+                'forma_pagamento' => $forma,
+                'data_vencimento' => $vencimento,
+                'valor'           => $venda->total,
+                'status'          => 'Pendente',
+            ]);
+        }
+
+        // Lançamento financeiro (Receita)
+        Lancamento::create([
+            'tipo'             => 'Receita',
+            'descricao'        => 'Faturamento ' . $referencia,
+            'cliente_id'       => $venda->cliente_id,
+            'valor'            => $venda->total,
+            'forma_pagamento'  => $forma,
+            'data_vencimento'  => $vencimento,
+            'pago'             => false,
+            'status'           => 'Pendente',
+            'observacoes'      => 'Gerado automaticamente ao faturar ' . $referencia,
+        ]);
+
+        return redirect()->route('cobrancas.index')->with('success', 'Venda faturada! Cobrança e lançamento criados.');
     }
 
     // -------------------------------------------------------------------------

@@ -151,6 +151,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Cobranças
     Route::get('/cobrancas', [CobrancaController::class, 'index'])->name('cobrancas.index');
+    Route::post('/cobrancas', [CobrancaController::class, 'store'])->name('cobrancas.store');
+    Route::post('/cobrancas/{cobranca}/pagar', [CobrancaController::class, 'pagar'])->name('cobrancas.pagar');
+    Route::delete('/cobrancas/{cobranca}', [CobrancaController::class, 'destroy'])->name('cobrancas.destroy');
 
     // Visitas Técnicas
     Route::prefix('visitas')->name('visitas.')->group(function () {
