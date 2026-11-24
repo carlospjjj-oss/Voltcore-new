@@ -43,33 +43,22 @@ echo ""
 # =============================================================================
 header "1/5 — Código fonte"
 
-if [ ! -d "$APP_DIR/.git" ]; then
-    # Primeira vez: backup do .env e storage, depois clone
-    warn "Repositório não inicializado. Copiando código..."
-
     # Salvar .env do setup.sh se existir
     [ -f "$APP_DIR/.env" ] && cp "$APP_DIR/.env" /tmp/voltcore.env.bak && log ".env salvo em /tmp/voltcore.env.bak"
 
     # Salvar storage/app/public se existir
     [ -d "$APP_DIR/storage/app/public" ] && cp -r "$APP_DIR/storage/app/public" /tmp/voltcore_storage_bak
 
-    # Clonar em diretório temporário e mover arquivos
+    # Clonar direto no APP_DIR (inicializa git)
     TMP_DIR=$(mktemp -d)
     git clone --depth=1 "$REPO_URL" "$TMP_DIR/repo"
 
-    # Copiar arquivos do repo (exceto .git) por cima do app Laravel existente
-    rsync -a --exclude='.git' --exclude='vendor' --exclude='node_modules' \
+    # Copiar tudo inclusive .git por cima do diretório existente
+    rsync -a --exclude='vendor' --exclude='node_modules' \
           "$TMP_DIR/repo/" "$APP_DIR/"
 
     rm -rf "$TMP_DIR"
-    log "Código copiado do repositório"
-else
-    # Já tem git: fazer pull
-    cd "$APP_DIR"
-    git fetch origin
-    git reset --hard origin/main
-    log "Código atualizado (git pull)"
-fi
+    log "Código clonado (git inicializado em $APP_DIR)"
 
 cd "$APP_DIR"
 
