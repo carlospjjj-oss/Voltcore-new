@@ -53,15 +53,10 @@
     {{-- Logo --}}
     <div class="flex items-center px-4 h-16 border-b border-gray-800 flex-shrink-0">
         <div class="flex items-center gap-3 overflow-hidden min-w-0">
-            {{-- Logo compacto (ícone do átomo) quando sidebar recolhida --}}
+            {{-- Logo: menor quando sidebar recolhida, maior quando aberta --}}
             <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-                 class="flex-shrink-0 object-contain transition-all duration-300"
-                 :class="sidebarOpen ? 'w-0 opacity-0 hidden' : 'w-8 h-8 block'">
-            {{-- Logo completo quando sidebar aberta --}}
-            <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-                 class="object-contain transition-all duration-300 overflow-hidden"
-                 :class="sidebarOpen ? 'h-10 max-w-[160px] opacity-100' : 'max-w-0 opacity-0 h-0'"
-                 x-show="mobileOpen || sidebarOpen" x-transition>
+                 class="object-contain transition-all duration-300 flex-shrink-0"
+                 :class="sidebarOpen ? 'h-8 w-auto' : 'h-6 w-6'">
         </div>
         {{-- Fechar no mobile --}}
         <button @click="mobileOpen = false" class="ml-auto lg:hidden text-gray-400 hover:text-white p-1 rounded-lg transition-colors">
