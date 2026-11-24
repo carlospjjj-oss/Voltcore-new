@@ -12,9 +12,9 @@ class Lancamento extends Model
 
     protected $fillable = [
         'usuario_id', 'categoria_id', 'cliente_id', 'os_id', 'venda_id',
-        'descricao', 'valor', 'tipo', 'forma_pagamento',
+        'descricao', 'valor', 'desconto', 'tipo', 'forma_pagamento', 'parcelas',
         'data_vencimento', 'data_pagamento', 'pago', 'status',
-        'baixa_retroativa', 'observacoes',
+        'baixa_retroativa', 'observacoes', 'arquivo_comprovante', 'numero_nf',
     ];
 
     protected $casts = [
@@ -30,6 +30,19 @@ class Lancamento extends Model
     public function cliente()   { return $this->belongsTo(Cliente::class); }
     public function os()        { return $this->belongsTo(OrdemServico::class, 'os_id'); }
     public function venda()     { return $this->belongsTo(Venda::class); }
+
+    public static function formasPagamento(): array
+    {
+        return [
+            'Dinheiro',
+            'Pix',
+            'Cartão de Crédito',
+            'Cartão de Débito',
+            'Boleto',
+            'Cheque',
+            'Transferência',
+        ];
+    }
 
     public function scopePendentes($q)  { return $q->where('pago', false); }
     public function scopeEntradas($q)   { return $q->where('tipo', 'entrada'); }
