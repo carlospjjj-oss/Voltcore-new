@@ -17,8 +17,9 @@ class OrdemServico extends Model
 
     protected $fillable = [
         'cliente_id', 'usuario_id', 'engenheiro_id',
-        'status', 'tipo_instalacao',
-        'data_inicial', 'data_final', 'data_inicio_instalacao', 'data_fim_instalacao',
+        'responsavel', 'status', 'tipo_instalacao',
+        'data_inicial', 'data_final', 'data_instalacao',
+        'data_inicio_instalacao', 'data_fim_instalacao',
         'equipamento', 'numero_serie', 'tensao',
         'descricao', 'observacoes', 'laudo',
         'garantia', 'garantia_ativa',
@@ -29,6 +30,7 @@ class OrdemServico extends Model
     protected $casts = [
         'data_inicial'            => 'date',
         'data_final'              => 'date',
+        'data_instalacao'         => 'date',
         'data_inicio_instalacao'  => 'date',
         'data_fim_instalacao'     => 'date',
         'garantia_ativa'          => 'boolean',

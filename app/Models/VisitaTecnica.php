@@ -12,9 +12,9 @@ class VisitaTecnica extends Model
 
     protected $table = 'visitas_tecnicas';
 
-    const STATUS_AGENDADO  = 'Agendado';
-    const STATUS_REALIZADO = 'Realizado';
-    const STATUS_CANCELADO = 'Cancelado';
+    const STATUS_AGENDADO  = 'agendado';
+    const STATUS_REALIZADO = 'realizado';
+    const STATUS_CANCELADO = 'cancelado';
 
     protected $fillable = [
         'cliente_id', 'usuario_id', 'os_id',

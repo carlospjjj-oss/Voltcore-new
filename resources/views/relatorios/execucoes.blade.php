@@ -35,7 +35,7 @@
                 <tr>
                     <td class="font-mono text-xs text-gray-400">{{ $e->id }}</td>
                     <td class="font-medium">{{ $e->os->cliente->nome ?? '—' }}</td>
-                    <td><a href="{{ route('os.edit', $e->os_id) }}" class="text-yellow-500 hover:underline">#{{ $e->os_id }}</a></td>
+                    <td><a href="{{ route('os.editar', $e->os_id) }}" class="text-yellow-500 hover:underline">#{{ $e->os_id }}</a></td>
                     <td>
                         <div class="flex items-center gap-2">
                             <div class="h-1.5 w-24 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">

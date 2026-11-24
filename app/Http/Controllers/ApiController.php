@@ -16,12 +16,12 @@ class ApiController extends Controller
         $clientes = Cliente::ativos()
             ->where(function ($query) use ($q) {
                 $query->where('nome', 'like', "%{$q}%")
-                      ->orWhere('cpf_cnpj', 'like', "%{$q}%");
+                      ->orWhere('documento', 'like', "%{$q}%");
             })
             ->limit(10)
-            ->get(['id', 'nome', 'cpf_cnpj', 'telefone', 'email']);
+            ->get(['id', 'nome', 'documento', 'telefone', 'email']);
 
-        return response()->json($clientes);
+        return response()->json(['clientes' => $clientes]);
     }
 
     public function buscarProdutos(Request $request)
@@ -32,7 +32,7 @@ class ApiController extends Controller
             ->limit(10)
             ->get(['id', 'nome', 'codigo', 'preco_venda', 'estoque', 'unidade']);
 
-        return response()->json($produtos);
+        return response()->json(['produtos' => $produtos]);
     }
 
     public function buscarServicos(Request $request)
@@ -43,12 +43,12 @@ class ApiController extends Controller
             ->limit(10)
             ->get(['id', 'nome', 'preco']);
 
-        return response()->json($servicos);
+        return response()->json(['servicos' => $servicos]);
     }
 
-    public function buscarCep(Request $request)
+    public function buscarCep(Request $request, string $cep = '')
     {
-        $cep = preg_replace('/\D/', '', $request->input('cep', ''));
+        $cep = preg_replace('/\D/', '', $cep ?: $request->input('cep', ''));
         if (strlen($cep) !== 8) {
             return response()->json(['error' => 'CEP inválido'], 422);
         }

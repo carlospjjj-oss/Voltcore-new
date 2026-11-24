@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\VisitaTecnica;
 use App\Models\OrdemServico;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AgendaController extends Controller
@@ -26,9 +27,9 @@ class AgendaController extends Controller
 
         foreach ($visitas as $v) {
             $cor = match($v->status) {
-                'realizado' => '#22c55e',
-                'cancelado' => '#ef4444',
-                default     => '#f59e0b',
+                VisitaTecnica::STATUS_REALIZADO => '#22c55e',
+                VisitaTecnica::STATUS_CANCELADO => '#ef4444',
+                default                         => '#f59e0b',
             };
             $eventos[] = [
                 'id'    => 'visita-' . $v->id,
@@ -55,7 +56,7 @@ class AgendaController extends Controller
                 'title' => '📋 OS #' . $os->id . ' - ' . ($os->cliente->nome ?? ''),
                 'start' => $os->data_instalacao->format('Y-m-d'),
                 'color' => '#6366f1',
-                'url'   => route('os.edit', $os->id),
+                'url'   => route('os.editar', $os->id),
                 'extendedProps' => [
                     'type'   => 'os',
                     'status' => $os->status,

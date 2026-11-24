@@ -15,6 +15,7 @@ use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PermissaoController;
+use App\Http\Controllers\ApiController;
 
 // -------------------------------------------------------------------------
 // Autenticação
@@ -72,12 +73,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{venda}/pdf', [VendaController::class, 'pdf'])->name('pdf');
 
         // Itens AJAX
-        Route::post('/{venda}/produto', [VendaController::class, 'adicionarProduto'])->name('produto.add');
-        Route::delete('/{venda}/produto/{item}', [VendaController::class, 'removerProduto'])->name('produto.remove');
-        Route::post('/{venda}/servico', [VendaController::class, 'adicionarServico'])->name('servico.add');
-        Route::delete('/{venda}/servico/{item}', [VendaController::class, 'removerServico'])->name('servico.remove');
-        Route::post('/{venda}/desconto', [VendaController::class, 'aplicarDesconto'])->name('desconto');
-        Route::post('/{venda}/desconto-servico', [VendaController::class, 'aplicarDescontoServico'])->name('desconto.servico');
+        Route::post('/{venda}/adicionar-produto', [VendaController::class, 'adicionarProduto'])->name('produto.add');
+        Route::post('/{venda}/adicionar-servico', [VendaController::class, 'adicionarServico'])->name('servico.add');
+        Route::delete('/{venda}/remover-item', [VendaController::class, 'removerItem'])->name('item.remove');
+        Route::post('/{venda}/desconto', [VendaController::class, 'atualizarDesconto'])->name('desconto');
     });
 
     // Financeiro
@@ -130,8 +129,8 @@ Route::middleware(['auth'])->group(function () {
 // API interna (AJAX)
 // -------------------------------------------------------------------------
 Route::middleware(['auth'])->prefix('api/v1')->name('api.')->group(function () {
-    Route::get('/clientes/buscar', [ClienteController::class, 'buscar'])->name('clientes.buscar');
-    Route::get('/produtos/buscar', [ProdutoController::class, 'buscar'])->name('produtos.buscar');
-    Route::get('/servicos/buscar', [ServicoController::class, 'buscar'])->name('servicos.buscar');
-    Route::get('/cep/{cep}', fn($cep) => \App\Services\CepService::buscar($cep))->name('cep');
+    Route::get('/buscar-clientes', [ApiController::class, 'buscarClientes'])->name('clientes.buscar');
+    Route::get('/buscar-produtos', [ApiController::class, 'buscarProdutos'])->name('produtos.buscar');
+    Route::get('/buscar-servicos', [ApiController::class, 'buscarServicos'])->name('servicos.buscar');
+    Route::get('/cep/{cep}',      [ApiController::class, 'buscarCep'])->name('cep');
 });

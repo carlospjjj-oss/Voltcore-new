@@ -184,6 +184,24 @@
         </footer>
     </div>
 
+<script>
+// Helper global para AJAX com CSRF e JSON
+async function apiFetch(url, options = {}) {
+    const defaults = {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+        },
+    };
+    const res = await fetch(url, { ...defaults, ...options, headers: { ...defaults.headers, ...(options.headers || {}) } });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({ message: res.statusText }));
+        throw new Error(err.message || 'Erro na requisição');
+    }
+    return res.json();
+}
+</script>
 @stack('scripts')
 </body>
 </html>

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained('clientes')->cascadeOnDelete();
             $table->foreignId('usuario_id')->constrained('users'); // responsável/técnico
             $table->foreignId('engenheiro_id')->nullable()->constrained('users');
+            $table->string('responsavel', 100)->nullable(); // nome livre do técnico responsável
 
             // Status
             $table->string('status', 50)->default('Aberto');
@@ -22,6 +23,7 @@ return new class extends Migration
             // Datas
             $table->date('data_inicial')->nullable();
             $table->date('data_final')->nullable();
+            $table->date('data_instalacao')->nullable(); // data agendada p/ instalação (usada na Agenda)
             $table->date('data_inicio_instalacao')->nullable();
             $table->date('data_fim_instalacao')->nullable();
 

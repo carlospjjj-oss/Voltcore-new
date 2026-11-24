@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->date('data_visita');
             $table->time('hora_visita')->nullable();
-            $table->string('status', 50)->default('Agendada');
+            $table->string('status', 50)->default('agendado');
             $table->string('tipo', 60)->nullable();
             $table->text('descricao')->nullable();
             $table->text('relatorio')->nullable();

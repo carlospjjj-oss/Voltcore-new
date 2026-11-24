@@ -10,14 +10,14 @@ class VendaServico extends Model
 
     protected $fillable = [
         'venda_id', 'servico_id', 'nome',
-        'quantidade', 'preco_unitario', 'subtotal', 'desconto',
+        'quantidade', 'preco_unitario', 'subtotal', 'margem',
     ];
 
     protected $casts = [
         'quantidade'     => 'decimal:3',
         'preco_unitario' => 'decimal:2',
         'subtotal'       => 'decimal:2',
-        'desconto'       => 'decimal:2',
+        'margem'         => 'decimal:2',
     ];
 
     public function venda()   { return $this->belongsTo(Venda::class); }

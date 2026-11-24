@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('categoria_id')->nullable()->constrained('categorias');
             $table->foreignId('cliente_id')->nullable()->constrained('clientes');
             $table->foreignId('os_id')->nullable()->constrained('ordens_servico');
+            $table->foreignId('venda_id')->nullable()->constrained('vendas');
 
             $table->string('descricao', 255);
             $table->decimal('valor', 12, 2);

@@ -22,7 +22,7 @@
                     <td class="font-medium">
                         <a href="{{ route('clientes.edit', $c) }}" class="hover:text-yellow-500">{{ $c->nome }}</a>
                     </td>
-                    <td class="text-center font-mono">{{ $c->ordens_count }}</td>
+                    <td class="text-center font-mono">{{ $c->ordens_servico_count }}</td>
                     <td class="text-center font-mono">{{ $c->vendas_count }}</td>
                     <td class="text-right font-mono font-semibold">
                         R$ {{ number_format($c->lancamentos_sum_valor ?? 0, 2, ',', '.') }}

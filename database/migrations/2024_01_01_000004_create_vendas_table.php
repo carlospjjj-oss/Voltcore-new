@@ -14,37 +14,34 @@ return new class extends Migration
             $table->foreignId('usuario_id')->constrained('users');
             $table->foreignId('os_id')->nullable()->constrained('ordens_servico');
 
-            $table->string('status', 50)->default('Aberto');
+            $table->string('status', 50)->default('Orçamento');
 
-            // Totais
+            // Totais calculados
             $table->decimal('total_produtos', 12, 2)->default(0);
             $table->decimal('total_servicos', 12, 2)->default(0);
             $table->decimal('total', 12, 2)->default(0);
 
             // Desconto em produtos
-            $table->decimal('desconto', 10, 2)->nullable();
-            $table->string('tipo_desconto', 20)->nullable();
-            $table->decimal('valor_desconto', 12, 2)->nullable();
+            $table->decimal('desconto_produtos', 10, 2)->default(0);
+            $table->string('tipo_desconto_produtos', 20)->default('valor')->comment('valor|porcento');
+            $table->decimal('valor_desconto_produtos', 12, 2)->default(0);
 
             // Desconto em serviços
-            $table->decimal('desconto_servico', 10, 2)->nullable();
-            $table->string('tipo_desconto_servico', 20)->nullable();
-            $table->decimal('valor_desconto_servico', 12, 2)->nullable();
+            $table->decimal('desconto_servicos', 10, 2)->default(0);
+            $table->string('tipo_desconto_servicos', 20)->default('valor');
+            $table->decimal('valor_desconto_servicos', 12, 2)->default(0);
 
-            // Condições de pagamento
-            $table->decimal('cond_aceite', 12, 2)->nullable();
-            $table->decimal('cond_aceite_pct', 6, 2)->nullable();
-            $table->decimal('cond_entrega_serv', 12, 2)->nullable();
-            $table->decimal('cond_entrega_serv_pct', 6, 2)->nullable();
-            $table->decimal('cond_pix', 12, 2)->nullable();
-            $table->decimal('cond_pix_pct', 6, 2)->nullable();
-            $table->decimal('cond_parcelado', 12, 2)->nullable();
-            $table->integer('cond_parcelas')->nullable();
+            // Condições de pagamento (booleanos)
+            $table->boolean('cond_aceite')->default(false);
+            $table->boolean('cond_pix')->default(false);
+            $table->boolean('cond_parcelado')->default(false);
+            $table->boolean('cond_boleto')->default(false);
+            $table->boolean('cond_financiamento')->default(false);
+            $table->integer('parcelas')->nullable();
 
             $table->text('observacoes')->nullable();
             $table->text('observacoes_cliente')->nullable();
 
-            // Controle de edição
             $table->boolean('faturado')->default(false);
             $table->boolean('garantia_status')->default(false);
 
@@ -60,10 +57,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('venda_id')->constrained('vendas')->cascadeOnDelete();
             $table->foreignId('produto_id')->constrained('produtos');
-            $table->decimal('quantidade', 10, 2);
+            $table->string('nome', 200);
+            $table->string('codigo', 50)->nullable();
+            $table->decimal('quantidade', 10, 3)->default(1);
             $table->decimal('preco_custo', 12, 2)->default(0);
-            $table->decimal('preco_venda', 12, 2);
-            $table->decimal('margem', 6, 2)->nullable()->comment('percentual');
+            $table->decimal('preco_unitario', 12, 2);
+            $table->decimal('subtotal', 12, 2)->default(0);
+            $table->decimal('margem', 6, 2)->nullable();
             $table->timestamps();
         });
 
@@ -72,8 +72,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('venda_id')->constrained('vendas')->cascadeOnDelete();
             $table->foreignId('servico_id')->constrained('servicos');
-            $table->decimal('quantidade', 10, 2)->default(1);
-            $table->decimal('preco', 12, 2);
+            $table->string('nome', 200);
+            $table->decimal('quantidade', 10, 3)->default(1);
+            $table->decimal('preco_unitario', 12, 2);
+            $table->decimal('subtotal', 12, 2)->default(0);
             $table->decimal('margem', 6, 2)->nullable();
             $table->timestamps();
         });

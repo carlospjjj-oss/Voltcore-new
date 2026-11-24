@@ -58,9 +58,9 @@ class RelatorioController extends Controller
 
     public function clientes(Request $request)
     {
-        $clientes = Cliente::withCount(['ordens', 'vendas'])
+        $clientes = Cliente::withCount(['ordensServico', 'vendas'])
             ->withSum('lancamentos', 'valor')
-            ->orderByDesc('ordens_count')
+            ->orderByDesc('ordens_servico_count')
             ->paginate(30);
 
         return view('relatorios.clientes', compact('clientes'));
