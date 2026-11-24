@@ -45,7 +45,7 @@
 
 {{-- =================== SIDEBAR =================== --}}
 <aside
-    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 transition-all duration-300 ease-in-out -translate-x-full lg:translate-x-0"
+    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 -translate-x-full lg:translate-x-0"
     :class="{
         'translate-x-0': mobileOpen,
         '-translate-x-full lg:translate-x-0': !mobileOpen
@@ -137,7 +137,15 @@
             </div>
         </div>
         {{-- Toggle desktop --}}
-        <button @click="sidebarOpen = !sidebarOpen; localStorage.setItem('sidebarOpen', sidebarOpen)"
+        <button @click="
+            sidebarOpen = !sidebarOpen;
+            localStorage.setItem('sidebarOpen', sidebarOpen);
+            const aside = $el.closest('aside');
+            const main = document.getElementById('main-content');
+            aside.style.transition = 'width 0.3s ease';
+            main.style.transition = 'padding-left 0.3s ease';
+            setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
+        "
                 class="hidden lg:flex w-full items-center justify-center gap-2 px-3 py-2 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors text-sm">
             <svg class="w-4 h-4 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
@@ -148,7 +156,7 @@
 </aside>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
-<div class="flex flex-col min-h-screen transition-all duration-300"
+<div class="flex flex-col min-h-screen"
      :style="window.innerWidth >= 1024 ? ('padding-left:' + (sidebarOpen ? '16rem' : '4rem')) : ''"
      id="main-content">
 
