@@ -14,7 +14,7 @@
     {{-- Logo --}}
     <div class="text-center mb-8">
         <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-             class="mx-auto h-24 w-auto mb-4 drop-shadow-lg">
+             class="mx-auto h-16 w-auto mb-4 drop-shadow-lg">
         <p class="text-gray-400 text-sm mt-1">Entre com sua conta para continuar</p>
     </div>
 
