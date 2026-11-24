@@ -54,4 +54,13 @@ class ProdutoController extends Controller
             'ativo'          => 'boolean',
         ];
     }
+
+    public function buscar(Request $request)
+    {
+        $q = $request->input('q', '');
+        return response()->json(
+            \App\Models\Produto::ativos()->pesquisa($q)->limit(10)
+                ->get(['id', 'nome', 'codigo', 'preco_venda', 'estoque', 'unidade'])
+        );
+    }
 }

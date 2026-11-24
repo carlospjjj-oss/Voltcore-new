@@ -10,7 +10,7 @@ use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\LancamentoController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
-use App\Http\Controllers\VisitaTecnicaController;
+use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\UsuarioController;
@@ -97,12 +97,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Visitas Técnicas
     Route::prefix('visitas')->name('visitas.')->group(function () {
-        Route::get('/', [VisitaTecnicaController::class, 'index'])->name('index');
-        Route::get('/nova', [VisitaTecnicaController::class, 'create'])->name('create');
-        Route::post('/', [VisitaTecnicaController::class, 'store'])->name('store');
-        Route::get('/{visita}/editar', [VisitaTecnicaController::class, 'edit'])->name('editar');
-        Route::put('/{visita}', [VisitaTecnicaController::class, 'update'])->name('update');
-        Route::delete('/{visita}', [VisitaTecnicaController::class, 'destroy'])->name('destroy');
+        Route::get('/', [VisitaController::class, 'index'])->name('index');
+        Route::get('/nova', [VisitaController::class, 'create'])->name('create');
+        Route::post('/', [VisitaController::class, 'store'])->name('store');
+        Route::get('/{visita}/editar', [VisitaController::class, 'edit'])->name('edit');
+        Route::put('/{visita}', [VisitaController::class, 'update'])->name('update');
+        Route::delete('/{visita}', [VisitaController::class, 'destroy'])->name('destroy');
     });
 
     // Relatórios

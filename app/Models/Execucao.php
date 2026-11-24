@@ -31,7 +31,18 @@ class Execucao extends Model
 
     const STATUS_ABERTO     = 'Aberto';
     const STATUS_ANDAMENTO  = 'Em Andamento';
+    const STATUS_EM_CAMPO   = 'Em Campo';
     const STATUS_CONCLUIDO  = 'Concluído';
+
+    public static function statusList(): array
+    {
+        return [
+            self::STATUS_ABERTO    => 'Aberto',
+            self::STATUS_EM_CAMPO  => 'Em Campo',
+            self::STATUS_ANDAMENTO => 'Em Andamento',
+            self::STATUS_CONCLUIDO => 'Concluído',
+        ];
+    }
 
     // -------------------------------------------------------------------------
     // Relacionamentos

@@ -47,4 +47,13 @@ class ServicoController extends Controller
             'ativo'  => 'boolean',
         ];
     }
+
+    public function buscar(Request $request)
+    {
+        $q = $request->input('q', '');
+        return response()->json(
+            \App\Models\Servico::ativos()->pesquisa($q)->limit(10)
+                ->get(['id', 'nome', 'preco'])
+        );
+    }
 }

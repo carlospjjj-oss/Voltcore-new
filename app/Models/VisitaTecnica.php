@@ -32,6 +32,10 @@ class VisitaTecnica extends Model
 
     public static function statusList(): array
     {
-        return [self::STATUS_AGENDADO, self::STATUS_REALIZADO, self::STATUS_CANCELADO];
+        return [
+            'agendado'  => self::STATUS_AGENDADO,
+            'realizado' => self::STATUS_REALIZADO,
+            'cancelado' => self::STATUS_CANCELADO,
+        ];
     }
 }
