@@ -93,11 +93,11 @@
                          ? 'bg-yellow-500/15 text-yellow-400'
                          : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                 <x-icon name="{{ $item['icon'] }}" class="w-5 h-5 flex-shrink-0"/>
-                <span class="whitespace-nowrap transition-all duration-200 lg:hidden xl:block" x-show="mobileOpen || sidebarOpen" x-cloak>{{ $item['label'] }}</span>
-                <span class="hidden lg:block whitespace-nowrap overflow-hidden transition-all duration-300" :class="sidebarOpen ? 'opacity-100' : 'opacity-0 w-0'">{{ $item['label'] }}</span>
+                <span class="whitespace-nowrap overflow-hidden transition-all duration-300"
+                      :class="sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'">{{ $item['label'] }}</span>
                 {{-- Tooltip ao recolher --}}
-                <span class="hidden lg:block absolute left-14 bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50"
-                      :class="sidebarOpen ? 'hidden' : ''">{{ $item['label'] }}</span>
+                <span class="absolute left-16 bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50"
+                      x-show="!sidebarOpen" style="display:none">{{ $item['label'] }}</span>
             </a>
         @endforeach
 
@@ -108,14 +108,14 @@
         <a href="{{ route('usuarios.index') }}" @click="mobileOpen = false"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
             <x-icon name="user-group" class="w-5 h-5 flex-shrink-0"/>
-            <span class="hidden lg:block whitespace-nowrap overflow-hidden transition-all duration-300" :class="sidebarOpen ? 'opacity-100' : 'opacity-0 w-0'">Usuários</span>
-            <span class="lg:hidden" x-show="mobileOpen">Usuários</span>
+            <span class="whitespace-nowrap overflow-hidden transition-all duration-300"
+                  :class="sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'">Usuários</span>
         </a>
         <a href="{{ route('permissoes.index') }}" @click="mobileOpen = false"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
             <x-icon name="shield-check" class="w-5 h-5 flex-shrink-0"/>
-            <span class="hidden lg:block whitespace-nowrap overflow-hidden transition-all duration-300" :class="sidebarOpen ? 'opacity-100' : 'opacity-0 w-0'">Permissões</span>
-            <span class="lg:hidden" x-show="mobileOpen">Permissões</span>
+            <span class="whitespace-nowrap overflow-hidden transition-all duration-300"
+                  :class="sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'">Permissões</span>
         </a>
         @endif
     </nav>
