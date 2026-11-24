@@ -27,10 +27,11 @@ class FinanceiroController extends Controller
             'pendentes' => Lancamento::pendentes()->sum('valor'),
         ];
 
-        $categorias = Categoria::orderBy('nome')->get();
-        $clientes   = Cliente::ativos()->orderBy('nome')->get(['id','nome']);
+        $categorias      = Categoria::orderBy('nome')->get();
+        $clientes        = Cliente::ativos()->orderBy('nome')->get(['id','nome']);
+        $formasPagamento = Lancamento::formasPagamento();
 
-        return view('financeiro.index', compact('lancamentos', 'totais', 'categorias', 'clientes'));
+        return view('financeiro.index', compact('lancamentos', 'totais', 'categorias', 'clientes', 'formasPagamento'));
     }
 
     public function relatorio(Request $request)
