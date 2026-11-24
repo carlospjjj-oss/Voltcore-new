@@ -105,12 +105,12 @@
                     <td class="text-right">
                         <div class="flex items-center justify-end gap-1">
                             @if(!$l->pago)
-                            <form method="POST" action="{{ route('financeiro.baixar', $l) }}">
+                            <form method="POST" action="{{ route('financeiro.lancamentos.baixar', $l) }}">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn btn-ghost py-1 px-2 text-xs text-green-600">Baixar</button>
                             </form>
                             @endif
-                            <form method="POST" action="{{ route('financeiro.destroy', $l) }}">
+                            <form method="POST" action="{{ route('financeiro.lancamentos.destroy', $l) }}">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-ghost py-1 px-2 text-xs text-red-500"
                                         onclick="return confirm('Remover lançamento?')">✕</button>
@@ -137,7 +137,7 @@
          @keydown.escape.window="modal = false">
         <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg p-6">
             <h3 class="font-semibold font-display text-lg mb-4">Novo Lançamento</h3>
-            <form method="POST" action="{{ route('financeiro.store') }}" class="space-y-4">
+            <form method="POST" action="{{ route('financeiro.lancamentos.store') }}" class="space-y-4">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="col-span-2">
