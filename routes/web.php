@@ -54,6 +54,22 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{os}', [OrdemServicoController::class, 'destroy'])->name('destroy');
         Route::post('/{os}/finalizar', [OrdemServicoController::class, 'finalizar'])->name('finalizar');
         Route::get('/{os}/pdf', [OrdemServicoController::class, 'pdf'])->name('pdf');
+
+        // AJAX — Produtos
+        Route::post('/{os}/adicionar-produto', [OrdemServicoController::class, 'adicionarProduto'])->name('produto.add');
+        Route::delete('/{os}/remover-produto', [OrdemServicoController::class, 'removerProduto'])->name('produto.remove');
+
+        // AJAX — Serviços
+        Route::post('/{os}/adicionar-servico', [OrdemServicoController::class, 'adicionarServico'])->name('servico.add');
+        Route::delete('/{os}/remover-servico', [OrdemServicoController::class, 'removerServico'])->name('servico.remove');
+
+        // AJAX — Anotações
+        Route::post('/{os}/anotacao', [OrdemServicoController::class, 'adicionarAnotacao'])->name('anotacao.add');
+        Route::delete('/{os}/anotacao/{anotacao}', [OrdemServicoController::class, 'removerAnotacao'])->name('anotacao.remove');
+
+        // AJAX — Anexos
+        Route::post('/{os}/anexo', [OrdemServicoController::class, 'uploadAnexo'])->name('anexo.upload');
+        Route::delete('/{os}/anexo/{anexo}', [OrdemServicoController::class, 'removerAnexo'])->name('anexo.remove');
     });
 
     // Execuções

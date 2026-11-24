@@ -24,7 +24,9 @@ class OrdemServico extends Model
         'descricao', 'defeito', 'observacoes', 'laudo',
         'garantia', 'garantia_ativa', 'termo_garantia',
         'desconto', 'tipo_desconto',
-        'finalizado', 'aprovado',
+        'documentacao',
+        'total_produtos', 'total_servicos', 'total', 'valor_desconto',
+        'finalizado', 'aprovado', 'faturado',
     ];
 
     protected $casts = [
@@ -36,26 +38,39 @@ class OrdemServico extends Model
         'garantia_ativa'          => 'boolean',
         'finalizado'              => 'boolean',
         'aprovado'                => 'boolean',
+        'faturado'                => 'boolean',
         'tensao'                  => 'decimal:2',
         'desconto'                => 'decimal:2',
+        'total_produtos'          => 'decimal:2',
+        'total_servicos'          => 'decimal:2',
+        'total'                   => 'decimal:2',
+        'valor_desconto'          => 'decimal:2',
+        'documentacao'            => 'array',
     ];
 
     // Status possíveis
-    const STATUS_ABERTO     = 'Aberto';
-    const STATUS_ANDAMENTO  = 'Em Andamento';
-    const STATUS_FINALIZADO = 'Finalizado';
-    const STATUS_APROVADO   = 'Aprovado';
-    const STATUS_CANCELADO  = 'Cancelado';
+    const STATUS_ABERTO          = 'Aberto';
+    const STATUS_ANDAMENTO       = 'Em Andamento';
+    const STATUS_AGUARDANDO      = 'Aguardando Peças';
+    const STATUS_FINALIZADO      = 'Finalizado';
+    const STATUS_FATURADO        = 'Faturado';
+    const STATUS_CANCELADO       = 'Cancelado';
 
     public static function statusList(): array
     {
         return [
             self::STATUS_ABERTO,
             self::STATUS_ANDAMENTO,
+            self::STATUS_AGUARDANDO,
             self::STATUS_FINALIZADO,
-            self::STATUS_APROVADO,
+            self::STATUS_FATURADO,
             self::STATUS_CANCELADO,
         ];
+    }
+
+    public function isFaturado(): bool
+    {
+        return $this->status === self::STATUS_FATURADO || $this->faturado;
     }
 
     // -------------------------------------------------------------------------
@@ -101,6 +116,21 @@ class OrdemServico extends Model
         return $this->hasMany(Lancamento::class, 'os_id');
     }
 
+    public function osProdutos(): HasMany
+    {
+        return $this->hasMany(OsProduto::class, 'os_id');
+    }
+
+    public function osServicos(): HasMany
+    {
+        return $this->hasMany(OsServico::class, 'os_id');
+    }
+
+    public function osAnotacoes(): HasMany
+    {
+        return $this->hasMany(OsAnotacao::class, 'os_id');
+    }
+
     // -------------------------------------------------------------------------
     // Scopes
     // -------------------------------------------------------------------------
@@ -135,5 +165,28 @@ class OrdemServico extends Model
     public function podeGerarExecucao(): bool
     {
         return $this->status === self::STATUS_FINALIZADO && !$this->execucao()->exists();
+    }
+
+    public function recalcularTotal(): void
+    {
+        $totalProd = $this->osProdutos()->sum('subtotal');
+        $totalServ = $this->osServicos()->sum('subtotal');
+        $totalBruto = $totalProd + $totalServ;
+
+        $desconto = floatval($this->desconto ?? 0);
+        $tipo     = $this->tipo_desconto ?? '%';
+
+        if ($tipo === '%') {
+            $valorDesc = $totalBruto * ($desconto / 100);
+        } else {
+            $valorDesc = $desconto;
+        }
+
+        $this->updateQuietly([
+            'total_produtos' => $totalProd,
+            'total_servicos' => $totalServ,
+            'valor_desconto' => $valorDesc,
+            'total'          => max(0, $totalBruto - $valorDesc),
+        ]);
     }
 }
