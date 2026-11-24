@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# VoltCore New — Setup Script para Ubuntu 22.04 / 24.04 LTS
+# VoltCore New — Setup Script para Ubuntu 22.04 / 24.04 / 26.10
 # Instala: PHP 8.3, Laravel 11, MySQL 8, Nginx, Redis, Node.js 20, Composer
 # Uso: sudo bash setup.sh
 # =============================================================================
@@ -62,17 +62,13 @@ log "Sistema atualizado"
 # =============================================================================
 header "2/9 — Instalando PHP ${PHP_VERSION}"
 
-# Adicionar repositório SURY (PHP atualizado para Debian)
-curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg
-echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
-    > /etc/apt/sources.list.d/php.list
-
+# Adicionar repositório ondrej/php (funciona no Ubuntu 22.04, 24.04, 26.10)
+add-apt-repository -y ppa:ondrej/php
 apt-get update -qq
 apt-get install -y -qq \
     php${PHP_VERSION}-fpm \
     php${PHP_VERSION}-cli \
     php${PHP_VERSION}-mysql \
-    php${PHP_VERSION}-pdo \
     php${PHP_VERSION}-mbstring \
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-bcmath \
@@ -81,12 +77,8 @@ apt-get install -y -qq \
     php${PHP_VERSION}-gd \
     php${PHP_VERSION}-intl \
     php${PHP_VERSION}-redis \
-    php${PHP_VERSION}-tokenizer \
-    php${PHP_VERSION}-json \
-    php${PHP_VERSION}-fileinfo \
     php${PHP_VERSION}-opcache \
-    php${PHP_VERSION}-dom \
-    php${PHP_VERSION}-xml
+    php${PHP_VERSION}-dom
 
 # Configurar php.ini para produção
 PHP_INI="/etc/php/${PHP_VERSION}/fpm/php.ini"
