@@ -146,13 +146,28 @@
             main.style.transition = 'padding-left 0.3s ease';
             setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
         "
-                class="hidden lg:flex w-full items-center justify-center gap-2 px-3 py-2 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors text-sm">
-            <svg class="w-4 h-4 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="hidden lg:flex w-full items-center gap-2 px-3 py-2 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors text-sm">
+            <svg class="w-4 h-4 flex-shrink-0 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
             </svg>
-            <span class="text-xs overflow-hidden transition-all duration-300" :class="sidebarOpen ? 'opacity-100' : 'opacity-0 w-0'">Recolher</span>
+            <span class="text-xs overflow-hidden transition-all duration-300 whitespace-nowrap" :class="sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'">Recolher menu</span>
         </button>
     </div>
+    {{-- Seta flutuante na borda --}}
+    <button @click="
+            sidebarOpen = !sidebarOpen;
+            localStorage.setItem('sidebarOpen', sidebarOpen);
+            const aside = $el.closest('aside');
+            const main = document.getElementById('main-content');
+            aside.style.transition = 'width 0.3s ease';
+            main.style.transition = 'padding-left 0.3s ease';
+            setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
+        "
+        class="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-full items-center justify-center text-white shadow-lg transition-colors z-10">
+        <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
 </aside>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
