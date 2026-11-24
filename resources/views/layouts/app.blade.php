@@ -45,7 +45,7 @@
 
 {{-- =================== SIDEBAR =================== --}}
 <aside
-    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 -translate-x-full lg:translate-x-0 overflow-visible"
+    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 -translate-x-full lg:translate-x-0"
     :class="{
         'translate-x-0': mobileOpen,
         '-translate-x-full lg:translate-x-0': !mobileOpen
@@ -138,24 +138,48 @@
         </div>
     </div>
 
-    {{-- Seta recolher sidebar (desktop) — grudada na borda direita do aside --}}
-    <button
-        class="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-10 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-r-lg items-center justify-center text-white shadow-lg transition-colors z-50"
+</aside>
+
+{{-- Seta recolher sidebar (desktop) --}}
+<button id="sidebar-toggle-btn"
+        class="hidden lg:flex fixed w-6 h-10 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-r-lg items-center justify-center text-white shadow-lg transition-colors z-[60]"
+        style="top:50vh; transform:translateY(-50%); left:16rem;"
         @click="
             sidebarOpen = !sidebarOpen;
             localStorage.setItem('sidebarOpen', sidebarOpen);
             const aside = document.querySelector('aside');
             const main = document.getElementById('main-content');
+            const btn = document.getElementById('sidebar-toggle-btn');
             aside.style.transition = 'width 0.3s ease';
             main.style.transition = 'padding-left 0.3s ease';
-            setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
+            btn.style.transition = 'left 0.3s ease';
+            aside.style.width = sidebarOpen ? '16rem' : '4rem';
+            main.style.paddingLeft = sidebarOpen ? '16rem' : '4rem';
+            btn.style.left = sidebarOpen ? '16rem' : '4rem';
+            icon.style.transform = sidebarOpen ? '' : 'rotate(180deg)';
+            setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; btn.style.transition = ''; }, 350);
         ">
-        <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'"
-             fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-        </svg>
-    </button>
-</aside>
+    <svg id="sidebar-toggle-icon" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+    </svg>
+</button>
+<script>
+(function() {
+    if (window.innerWidth < 1024) return;
+    var saved = localStorage.getItem('sidebarOpen');
+    var isOpen = saved !== 'false';
+    var btn = document.getElementById('sidebar-toggle-btn');
+    var icon = document.getElementById('sidebar-toggle-icon');
+    if (btn) btn.style.left = isOpen ? '16rem' : '4rem';
+    if (icon) icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+    // keep icon in sync with Alpine
+    document.addEventListener('alpine:initialized', function() {
+        var htmlEl = document.documentElement;
+        var observer = new MutationObserver(function() {});
+        // watch sidebarOpen via click only — handled inline
+    });
+})();
+</script>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
 <div class="flex flex-col min-h-screen"
