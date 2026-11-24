@@ -110,6 +110,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{visita}/editar', [VisitaController::class, 'edit'])->name('edit');
         Route::put('/{visita}', [VisitaController::class, 'update'])->name('update');
         Route::delete('/{visita}', [VisitaController::class, 'destroy'])->name('destroy');
+        Route::post('/{visita}/midia', [VisitaController::class, 'uploadMidia'])->name('midia.upload');
+        Route::delete('/{visita}/midia', [VisitaController::class, 'excluirMidia'])->name('midia.destroy');
+        Route::get('/buscar-cliente', [VisitaController::class, 'buscarCliente'])->name('buscar-cliente');
     });
 
     // Relatórios

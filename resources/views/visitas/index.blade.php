@@ -35,10 +35,11 @@
                 @forelse($visitas as $v)
                 @php
                     $badgeClass = match($v->status) {
-                        'agendado'  => 'badge-warning',
-                        'realizado' => 'badge-success',
-                        'cancelado' => 'badge-danger',
-                        default     => 'badge-secondary',
+                        'Agendada'   => 'badge-warning',
+                        'Realizada'  => 'badge-success',
+                        'Cancelada'  => 'badge-danger',
+                        'Reagendada' => 'badge-info',
+                        default      => 'badge-secondary',
                     };
                 @endphp
                 <tr>
@@ -48,7 +49,7 @@
                             {{ $v->cliente->nome ?? '—' }}
                         </a>
                     </td>
-                    <td class="text-sm text-gray-500">{{ $v->tipo ?: '—' }}</td>
+                    <td class="text-sm text-gray-500">{{ $v->tipo_servico ?: '—' }}</td>
                     <td class="text-sm font-mono">
                         {{ \Carbon\Carbon::parse($v->data_visita)->format('d/m/Y') }}
                         @if($v->hora_visita) <span class="text-gray-400">{{ $v->hora_visita }}</span> @endif

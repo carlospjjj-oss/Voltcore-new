@@ -18,8 +18,9 @@ class VisitaTecnica extends Model
 
     protected $fillable = [
         'cliente_id', 'usuario_id', 'os_id',
-        'data_visita', 'hora_visita', 'status', 'tipo',
-        'descricao', 'relatorio',
+        'data_visita', 'hora_visita', 'status',
+        'tipo_servico', 'endereco',
+        'descricao', 'observacoes', 'resultado', 'relatorio',
     ];
 
     protected $casts = [
@@ -29,13 +30,30 @@ class VisitaTecnica extends Model
     public function cliente() { return $this->belongsTo(Cliente::class); }
     public function usuario() { return $this->belongsTo(User::class); }
     public function os()      { return $this->belongsTo(OrdemServico::class, 'os_id'); }
+    public function midias()  { return $this->hasMany(VisitaMidia::class, 'visita_tecnica_id'); }
+    public function fotos()   { return $this->midias()->where('tipo', 'foto'); }
+    public function videos()  { return $this->midias()->where('tipo', 'video'); }
+
+    const STATUS_REAGENDADO = 'reagendado';
 
     public static function statusList(): array
     {
         return [
-            'agendado'  => self::STATUS_AGENDADO,
-            'realizado' => self::STATUS_REALIZADO,
-            'cancelado' => self::STATUS_CANCELADO,
+            'Agendada'    => 'Agendada',
+            'Realizada'   => 'Realizada',
+            'Cancelada'   => 'Cancelada',
+            'Reagendada'  => 'Reagendada',
+        ];
+    }
+
+    public static function tipoServicoList(): array
+    {
+        return [
+            'Instalação de Carregador EV',
+            'Manutenção Preventiva',
+            'Manutenção Corretiva',
+            'Vistoria Técnica',
+            'Outro',
         ];
     }
 }
