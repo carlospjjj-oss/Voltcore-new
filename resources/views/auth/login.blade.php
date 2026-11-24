@@ -8,13 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css'])
 </head>
-<body class="h-full bg-gray-950 flex items-center justify-center p-4">
+<body class="h-full bg-gray-950 flex flex-col items-center justify-center p-4">
 
-<div class="w-full max-w-xs">
+<div class="w-full" style="max-width:360px">
     {{-- Logo --}}
     <div class="text-center mb-6">
         <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-             class="mx-auto h-24 w-auto mb-3 drop-shadow-lg">
+             class="mx-auto mb-3 drop-shadow-lg" style="height:110px;width:auto">
         <p class="text-gray-400 text-sm">Entre com sua conta para continuar</p>
     </div>
 
@@ -63,8 +63,8 @@
     </div>
 
     <p class="text-center text-xs text-gray-600 mt-6">
-        © {{ date('Y') }} <a href="https://protonmobilidade.com.br" target="_blank"
-            class="text-gray-500 hover:text-orange-400 transition-colors">Proton Mobilidade</a>
+        © {{ date('Y') }} <a href="https://www.supremasti.com.br" target="_blank"
+            class="text-gray-500 hover:text-orange-400 transition-colors">Supremasti</a>
     </p>
 </div>
 
