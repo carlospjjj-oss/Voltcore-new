@@ -142,8 +142,8 @@
 
 {{-- Seta recolher sidebar (desktop) --}}
 <button id="sidebar-toggle-btn"
-        class="hidden lg:flex fixed w-5 h-14 bg-gray-600 hover:bg-yellow-500 border border-gray-500 rounded-r-xl items-center justify-center text-white shadow-xl transition-colors z-[60]"
-        style="top:50vh; transform:translateY(-50%); left:16rem;"
+        class="hidden lg:flex fixed rounded-r-xl items-center justify-center shadow-xl z-[60]"
+        style="top:50vh; transform:translateY(-50%); left:16rem; width:20px; height:56px; background:#f97316; border:2px solid #ea580c; color:#fff;"
         @click="
             sidebarOpen = !sidebarOpen;
             localStorage.setItem('sidebarOpen', sidebarOpen);
@@ -159,7 +159,7 @@
             icon.style.transform = sidebarOpen ? '' : 'rotate(180deg)';
             setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; btn.style.transition = ''; }, 350);
         ">
-    <svg id="sidebar-toggle-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg id="sidebar-toggle-icon" style="width:14px;height:14px;" fill="none" stroke="#fff" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
     </svg>
 </button>
