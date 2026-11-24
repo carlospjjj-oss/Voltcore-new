@@ -23,7 +23,7 @@ class DashboardController extends Controller
             'os_abertas'              => OrdemServico::where('status', OrdemServico::STATUS_ABERTO)->count(),
             'os_hoje'                 => OrdemServico::whereDate('created_at', $hoje)->count(),
             'execucoes_andamento'     => Execucao::where('status', Execucao::STATUS_ANDAMENTO)->count(),
-            'execucoes_concluidas_mes'=> Execucao::where('status', Execucao::STATUS_CONCLUIDO)
+            'execucoes_concluidas_mes'=> Execucao::where('status', Execucao::STATUS_FINALIZADO)
                                             ->whereBetween('updated_at', [$inicioMes, $fimMes])->count(),
             'total_clientes'          => Cliente::ativos()->count(),
             'clientes_novos_mes'      => Cliente::whereBetween('created_at', [$inicioMes, $fimMes])->count(),

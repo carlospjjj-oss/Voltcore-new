@@ -78,8 +78,8 @@ class RelatorioController extends Controller
 
         $totais = [
             'total'     => $execucoes->count(),
-            'concluido' => $execucoes->where('status', Execucao::STATUS_CONCLUIDO)->count(),
-            'em_campo'  => $execucoes->where('status', Execucao::STATUS_EM_CAMPO)->count(),
+            'concluido' => $execucoes->where('status', Execucao::STATUS_FINALIZADO)->count(),
+            'em_campo'  => $execucoes->where('status', Execucao::STATUS_EXECUTADO)->count(),
             'aberto'    => $execucoes->where('status', Execucao::STATUS_ABERTO)->count(),
         ];
 
