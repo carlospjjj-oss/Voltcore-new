@@ -38,6 +38,9 @@
     .btn-danger {
         @apply btn bg-red-500 hover:bg-red-600 text-white focus:ring-red-500;
     }
+    .btn-success {
+        @apply btn bg-green-600 hover:bg-green-700 text-white focus:ring-green-500;
+    }
     .btn-ghost {
         @apply btn hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400;
     }

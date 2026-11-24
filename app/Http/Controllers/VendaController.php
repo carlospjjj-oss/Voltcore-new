@@ -10,6 +10,7 @@ use App\Models\Produto;
 use App\Models\Servico;
 use App\Models\OrdemServico;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class VendaController extends Controller
 {
@@ -29,9 +30,8 @@ class VendaController extends Controller
     public function create(Request $request)
     {
         $clientes = Cliente::ativos()->orderBy('nome')->get(['id', 'nome']);
-        $os       = OrdemServico::with('cliente')->orderByDesc('id')->limit(50)->get(['id', 'cliente_id']);
-        $osId     = $request->os_id;
-        return view('vendas.form', compact('clientes', 'os', 'osId') + ['venda' => new Venda()]);
+        $venda = new Venda(['garantia' => 365, 'status' => Venda::STATUS_ORCAMENTO]);
+        return view('vendas.form', compact('clientes', 'venda'));
     }
 
     public function store(Request $request)
@@ -41,18 +41,22 @@ class VendaController extends Controller
             'status'     => 'required|string',
         ]);
 
-        $venda = Venda::create([
-            'cliente_id'  => $request->cliente_id,
-            'usuario_id'  => auth()->id(),
-            'os_id'       => $request->os_id ?: null,
-            'status'      => $request->status,
-            'observacoes' => $request->observacoes,
-        ] + $this->condicoesData($request));
+        $venda = Venda::create(array_merge([
+            'cliente_id'          => $request->cliente_id,
+            'usuario_id'          => auth()->id(),
+            'os_id'               => $request->os_id ?: null,
+            'status'              => $request->status,
+            'garantia'            => $request->input('garantia', 365),
+            'data_venda'          => $request->data_venda ?: now()->toDateString(),
+            'observacoes'         => $request->observacoes,
+            'observacoes_cliente' => $request->observacoes_cliente,
+            'desconto'            => $request->input('desconto', 0),
+            'tipo_desconto'       => $request->input('tipo_desconto', '%'),
+        ], $this->condicoesData($request)));
 
-        $this->sincronizarItens($venda, $request);
         $venda->recalcularTotal();
 
-        return redirect()->route('vendas.edit', $venda)->with('success', 'Venda criada!');
+        return redirect()->route('vendas.editar', $venda)->with('success', 'Venda criada!');
     }
 
     public function edit(Venda $venda)
@@ -64,23 +68,31 @@ class VendaController extends Controller
 
     public function update(Request $request, Venda $venda)
     {
+        // Bloqueia edição de venda faturada
+        if ($venda->isFaturado()) {
+            return back()->with('error', 'Venda faturada não pode ser editada.');
+        }
+
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'status'     => 'required|string',
         ]);
 
-        $venda->update([
-            'cliente_id'  => $request->cliente_id,
-            'os_id'       => $request->os_id ?: null,
-            'status'      => $request->status,
-            'observacoes' => $request->observacoes,
-            'faturado'    => $request->boolean('faturado'),
-        ] + $this->condicoesData($request));
+        $venda->update(array_merge([
+            'cliente_id'          => $request->cliente_id,
+            'os_id'               => $request->os_id ?: null,
+            'status'              => $request->status,
+            'garantia'            => $request->input('garantia', 365),
+            'data_venda'          => $request->data_venda ?: $venda->data_venda,
+            'observacoes'         => $request->observacoes,
+            'observacoes_cliente' => $request->observacoes_cliente,
+            'desconto'            => $request->input('desconto', 0),
+            'tipo_desconto'       => $request->input('tipo_desconto', '%'),
+        ], $this->condicoesData($request)));
 
-        $this->sincronizarItens($venda, $request);
         $venda->recalcularTotal();
 
-        return redirect()->route('vendas.edit', $venda)->with('success', 'Venda atualizada!');
+        return redirect()->route('vendas.editar', $venda)->with('success', 'Venda atualizada!');
     }
 
     public function destroy(Venda $venda)
@@ -89,65 +101,128 @@ class VendaController extends Controller
         return redirect()->route('vendas.index')->with('success', 'Venda removida.');
     }
 
-    // AJAX — adicionar produto
+    /**
+     * Faturar venda — POST com modal NF MO / NF MT.
+     */
+    public function faturar(Request $request, Venda $venda)
+    {
+        if ($venda->isFaturado()) {
+            return back()->with('error', 'Venda já está faturada.');
+        }
+
+        $venda->update([
+            'status'          => Venda::STATUS_FATURADO,
+            'faturado'        => true,
+            'nf_mo'           => $request->boolean('nf_mo'),
+            'nf_mt'           => $request->boolean('nf_mt'),
+            'data_faturamento'=> now()->toDateString(),
+        ]);
+
+        return redirect()->route('vendas.editar', $venda)->with('success', 'Venda faturada com sucesso!');
+    }
+
+    // -------------------------------------------------------------------------
+    // AJAX endpoints
+    // -------------------------------------------------------------------------
+
+    /** Adicionar produto com margem */
     public function adicionarProduto(Request $request, Venda $venda)
     {
+        if ($venda->isFaturado()) {
+            return response()->json(['error' => 'Venda faturada.'], 403);
+        }
+
         $request->validate([
             'produto_id'     => 'required|exists:produtos,id',
             'quantidade'     => 'required|numeric|min:0.001',
             'preco_unitario' => 'required|numeric|min:0',
+            'margem'         => 'nullable|numeric|min:0',
         ]);
 
         $produto  = Produto::findOrFail($request->produto_id);
-        $subtotal = $request->quantidade * $request->preco_unitario;
+        $qtd      = floatval($request->quantidade);
+        $preco    = floatval($request->preco_unitario);
+        $margem   = floatval($request->input('margem', 0));
+        // subtotal = preço × qtd × (1 + margem/100)
+        $subtotal = $preco * $qtd * (1 + $margem / 100);
 
         $item = $venda->produtos()->updateOrCreate(
             ['produto_id' => $request->produto_id],
             [
                 'nome'           => $produto->nome,
-                'codigo'         => $produto->codigo,
-                'quantidade'     => $request->quantidade,
-                'preco_unitario' => $request->preco_unitario,
+                'codigo'         => $produto->codigo ?? '',
+                'quantidade'     => $qtd,
+                'preco_unitario' => $preco,
+                'margem'         => $margem,
                 'subtotal'       => $subtotal,
             ]
         );
 
         $venda->recalcularTotal();
+        $fresh = $venda->fresh();
 
-        return response()->json(['success' => true, 'item' => $item, 'total' => $venda->fresh()->total]);
+        return response()->json([
+            'success'          => true,
+            'item'             => $item,
+            'total_produtos'   => $fresh->total_produtos,
+            'total_servicos'   => $fresh->total_servicos,
+            'total'            => $fresh->total,
+            'valor_desconto'   => $fresh->valor_desconto,
+        ]);
     }
 
-    // AJAX — adicionar serviço
+    /** Adicionar serviço com margem */
     public function adicionarServico(Request $request, Venda $venda)
     {
+        if ($venda->isFaturado()) {
+            return response()->json(['error' => 'Venda faturada.'], 403);
+        }
+
         $request->validate([
             'servico_id'     => 'required|exists:servicos,id',
             'quantidade'     => 'required|numeric|min:0.001',
             'preco_unitario' => 'required|numeric|min:0',
+            'margem'         => 'nullable|numeric|min:0',
         ]);
 
         $servico  = Servico::findOrFail($request->servico_id);
-        $subtotal = $request->quantidade * $request->preco_unitario;
+        $qtd      = floatval($request->quantidade);
+        $preco    = floatval($request->preco_unitario);
+        $margem   = floatval($request->input('margem', 0));
+        $subtotal = $preco * $qtd * (1 + $margem / 100);
 
         $item = $venda->servicos()->updateOrCreate(
             ['servico_id' => $request->servico_id],
             [
                 'nome'           => $servico->nome,
-                'quantidade'     => $request->quantidade,
-                'preco_unitario' => $request->preco_unitario,
+                'quantidade'     => $qtd,
+                'preco_unitario' => $preco,
+                'margem'         => $margem,
                 'subtotal'       => $subtotal,
             ]
         );
 
         $venda->recalcularTotal();
+        $fresh = $venda->fresh();
 
-        return response()->json(['success' => true, 'item' => $item, 'total' => $venda->fresh()->total]);
+        return response()->json([
+            'success'        => true,
+            'item'           => $item,
+            'total_produtos' => $fresh->total_produtos,
+            'total_servicos' => $fresh->total_servicos,
+            'total'          => $fresh->total,
+            'valor_desconto' => $fresh->valor_desconto,
+        ]);
     }
 
-    // AJAX — remover item
+    /** Remover item */
     public function removerItem(Request $request, Venda $venda)
     {
-        $tipo = $request->tipo; // 'produto' ou 'servico'
+        if ($venda->isFaturado()) {
+            return response()->json(['error' => 'Venda faturada.'], 403);
+        }
+
+        $tipo = $request->tipo;
         $id   = $request->item_id;
 
         if ($tipo === 'produto') {
@@ -157,67 +232,57 @@ class VendaController extends Controller
         }
 
         $venda->recalcularTotal();
+        $fresh = $venda->fresh();
 
-        return response()->json(['success' => true, 'total' => $venda->fresh()->total]);
+        return response()->json([
+            'success'        => true,
+            'total_produtos' => $fresh->total_produtos,
+            'total_servicos' => $fresh->total_servicos,
+            'total'          => $fresh->total,
+            'valor_desconto' => $fresh->valor_desconto,
+        ]);
     }
 
-    // AJAX — atualizar desconto
+    /** Atualizar desconto único via AJAX */
     public function atualizarDesconto(Request $request, Venda $venda)
     {
+        if ($venda->isFaturado()) {
+            return response()->json(['error' => 'Venda faturada.'], 403);
+        }
+
         $venda->update([
-            'desconto_produtos'       => $request->desconto_produtos ?? 0,
-            'tipo_desconto_produtos'  => $request->tipo_desconto_produtos ?? 'valor',
-            'desconto_servicos'       => $request->desconto_servicos ?? 0,
-            'tipo_desconto_servicos'  => $request->tipo_desconto_servicos ?? 'valor',
+            'desconto'      => $request->input('desconto', 0),
+            'tipo_desconto' => $request->input('tipo_desconto', '%'),
         ]);
 
         $venda->recalcularTotal();
+        $fresh = $venda->fresh();
 
-        return response()->json(['success' => true, 'total' => $venda->fresh()->total]);
+        return response()->json([
+            'success'        => true,
+            'total_produtos' => $fresh->total_produtos,
+            'total_servicos' => $fresh->total_servicos,
+            'valor_desconto' => $fresh->valor_desconto,
+            'total'          => $fresh->total,
+        ]);
     }
+
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
 
     private function condicoesData(Request $request): array
     {
         return [
-            'cond_aceite'      => $request->boolean('cond_aceite'),
-            'cond_pix'         => $request->boolean('cond_pix'),
-            'cond_parcelado'   => $request->boolean('cond_parcelado'),
-            'cond_boleto'      => $request->boolean('cond_boleto'),
-            'cond_financiamento' => $request->boolean('cond_financiamento'),
-            'parcelas'         => $request->parcelas ?: null,
+            'cond_aceite'           => $request->boolean('cond_aceite'),
+            'cond_aceite_pct'       => $request->input('cond_aceite_pct', 0),
+            'cond_entrega_serv'     => $request->boolean('cond_entrega_serv'),
+            'cond_entrega_serv_pct' => $request->input('cond_entrega_serv_pct', 0),
+            'cond_pix'              => $request->boolean('cond_pix'),
+            'cond_pix_pct'          => $request->input('cond_pix_pct', 4),
+            'cond_parcelado'        => $request->boolean('cond_parcelado'),
+            'cond_parcelas'         => $request->input('cond_parcelas') ?: null,
+            'cond_boleto'           => $request->boolean('cond_boleto'),
         ];
-    }
-
-    private function sincronizarItens(Venda $venda, Request $request): void
-    {
-        // Produtos em lote (do form hidden fields)
-        if ($request->has('produtos')) {
-            $venda->produtos()->delete();
-            foreach ($request->produtos as $item) {
-                if (empty($item['produto_id'])) continue;
-                $venda->produtos()->create([
-                    'produto_id'     => $item['produto_id'],
-                    'nome'           => $item['nome'] ?? '',
-                    'codigo'         => $item['codigo'] ?? '',
-                    'quantidade'     => $item['quantidade'] ?? 1,
-                    'preco_unitario' => $item['preco_unitario'] ?? 0,
-                    'subtotal'       => ($item['quantidade'] ?? 1) * ($item['preco_unitario'] ?? 0),
-                ]);
-            }
-        }
-
-        if ($request->has('servicos')) {
-            $venda->servicos()->delete();
-            foreach ($request->servicos as $item) {
-                if (empty($item['servico_id'])) continue;
-                $venda->servicos()->create([
-                    'servico_id'     => $item['servico_id'],
-                    'nome'           => $item['nome'] ?? '',
-                    'quantidade'     => $item['quantidade'] ?? 1,
-                    'preco_unitario' => $item['preco_unitario'] ?? 0,
-                    'subtotal'       => ($item['quantidade'] ?? 1) * ($item['preco_unitario'] ?? 0),
-                ]);
-            }
-        }
     }
 }

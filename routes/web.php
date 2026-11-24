@@ -72,6 +72,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [VendaController::class, 'store'])->name('store');
         Route::get('/{venda}/editar', [VendaController::class, 'edit'])->name('editar');
         Route::put('/{venda}', [VendaController::class, 'update'])->name('update');
+        Route::delete('/{venda}', [VendaController::class, 'destroy'])->name('destroy');
+        Route::post('/{venda}/faturar', [VendaController::class, 'faturar'])->name('faturar');
         Route::get('/{venda}/pdf', [VendaController::class, 'pdf'])->name('pdf');
 
         // Itens AJAX
