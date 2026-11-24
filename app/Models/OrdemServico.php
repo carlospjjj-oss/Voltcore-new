@@ -108,7 +108,7 @@ class OrdemServico extends Model
 
     public function garantia(): HasOne
     {
-        return $this->hasOne(Garantia::class, 'os_id');
+        return $this->hasOne(Execucao::class, 'os_id'); // Garantia via execucao
     }
 
     public function lancamentos(): HasMany

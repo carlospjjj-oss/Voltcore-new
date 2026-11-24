@@ -47,12 +47,10 @@
 <aside
     class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 transition-all duration-300 ease-in-out -translate-x-full lg:translate-x-0"
     :class="{
-        'translate-x-0 !translate-x-0': mobileOpen,
-        '-translate-x-full': !mobileOpen,
-        'lg:w-64': sidebarOpen,
-        'lg:w-16': !sidebarOpen,
-        'w-72': true
+        'translate-x-0': mobileOpen,
+        '-translate-x-full lg:translate-x-0': !mobileOpen
     }"
+    :style="window.innerWidth >= 1024 ? ('width:' + (sidebarOpen ? '16rem' : '4rem')) : 'width:16rem'"
 >
     {{-- Logo --}}
     <div class="flex items-center px-4 h-16 border-b border-gray-800 flex-shrink-0">
@@ -151,7 +149,9 @@
 </aside>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
-<div class="flex flex-col min-h-screen transition-all duration-300 lg:pl-64" :class="{ 'lg:pl-16': !sidebarOpen, 'lg:pl-64': sidebarOpen }">
+<div class="flex flex-col min-h-screen transition-all duration-300"
+     :style="window.innerWidth >= 1024 ? ('padding-left:' + (sidebarOpen ? '16rem' : '4rem')) : ''"
+     id="main-content">
 
     {{-- Topbar --}}
     <header class="sticky top-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 h-16 flex items-center px-4 sm:px-6 gap-3">
@@ -259,12 +259,15 @@
 <div class="lg:hidden h-16"></div>
 
 <script>
-// Restaurar sidebar state no desktop
+// Aplicar largura sidebar + padding main ANTES do Alpine (evita flash)
 (function() {
+    if (window.innerWidth < 1024) return;
     var saved = localStorage.getItem('sidebarOpen');
-    if (saved !== null) {
-        // Alpine já vai ler ao iniciar, mas garantimos a classe inicial
-    }
+    var isOpen = saved !== 'false';
+    var aside = document.querySelector('aside');
+    var main  = document.getElementById('main-content');
+    if (aside) aside.style.width = isOpen ? '16rem' : '4rem';
+    if (main)  main.style.paddingLeft = isOpen ? '16rem' : '4rem';
 })();
 
 // Helper global para AJAX com CSRF e JSON
