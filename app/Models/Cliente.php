@@ -14,14 +14,16 @@ class Cliente extends Model
     protected $table = 'clientes';
 
     protected $fillable = [
-        'nome', 'pessoa_fisica', 'documento', 'email', 'telefone', 'celular',
+        'nome', 'contato', 'pessoa_fisica', 'documento', 'email', 'telefone', 'celular',
         'rua', 'numero', 'complemento', 'bairro', 'cidade', 'estado', 'cep',
-        'observacoes', 'cliente_fornecedor', 'ativo', 'asaas_id', 'senha_cliente',
+        'observacoes', 'cliente_fornecedor', 'terceiro', 'ativo', 'asaas_id', 'senha_cliente',
+        'tipo_imovel', 'veiculo_eletrico', 'carregador_atual',
     ];
 
     protected $casts = [
         'pessoa_fisica'      => 'boolean',
         'cliente_fornecedor' => 'boolean',
+        'terceiro'           => 'boolean',
         'ativo'              => 'boolean',
     ];
 

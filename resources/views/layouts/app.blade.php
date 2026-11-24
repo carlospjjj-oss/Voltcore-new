@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR"
       x-data="{
-          sidebarOpen: window.innerWidth >= 1024,
+          sidebarOpen: window.innerWidth >= 1024 ? (localStorage.getItem('sidebarOpen') !== 'false') : false,
           mobileOpen: false,
           darkMode: localStorage.getItem('darkMode') === 'true'
       }"
@@ -45,11 +45,10 @@
 
 {{-- =================== SIDEBAR =================== --}}
 <aside
-    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 transition-all duration-300 ease-in-out"
+    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 transition-all duration-300 ease-in-out -translate-x-full lg:translate-x-0"
     :class="{
-        'translate-x-0': mobileOpen,
+        'translate-x-0 !translate-x-0': mobileOpen,
         '-translate-x-full': !mobileOpen,
-        'lg:translate-x-0': true,
         'lg:w-64': sidebarOpen,
         'lg:w-16': !sidebarOpen,
         'w-72': true

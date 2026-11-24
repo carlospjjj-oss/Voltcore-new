@@ -11,7 +11,8 @@ class Produto extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'nome', 'codigo', 'preco_custo', 'preco_venda',
+        'nome', 'codigo', 'cod_barra', 'ncm', 'descricao',
+        'preco_custo', 'preco_venda',
         'estoque', 'estoque_minimo', 'unidade', 'ativo',
     ];
 

@@ -3,35 +3,84 @@
 @section('page-title', $produto->exists ? 'Editar Produto' : 'Novo Produto')
 
 @section('content')
-<div class="max-w-xl">
+<div class="max-w-2xl" x-data="produtoForm()">
     <form method="POST" action="{{ $produto->exists ? route('produtos.update', $produto) : route('produtos.store') }}">
         @csrf @if($produto->exists) @method('PUT') @endif
         <div class="card">
             <div class="card-body space-y-4">
+
+                {{-- Nome / Descrição --}}
                 <div>
                     <label class="input-label">Nome *</label>
-                    <input type="text" name="nome" value="{{ old('nome', $produto->nome) }}" required class="input">
+                    <input type="text" name="nome" value="{{ old('nome', $produto->nome) }}" required class="input" placeholder="Nome do produto">
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="input-label">Descrição</label>
+                    <textarea name="descricao" rows="2" class="input resize-none" placeholder="Descrição adicional...">{{ old('descricao', $produto->descricao) }}</textarea>
+                </div>
+
+                {{-- Código / Cód. Barras / NCM --}}
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label class="input-label">Código</label>
+                        <label class="input-label">Código (SKU)</label>
                         <input type="text" name="codigo" value="{{ old('codigo', $produto->codigo) }}" class="input" placeholder="SKU">
                     </div>
                     <div>
-                        <label class="input-label">Unidade</label>
-                        <input type="text" name="unidade" value="{{ old('unidade', $produto->unidade ?? 'un') }}" class="input" placeholder="un, m, m², kg">
+                        <label class="input-label">Cód. de Barras</label>
+                        <input type="text" name="cod_barra" value="{{ old('cod_barra', $produto->cod_barra) }}" class="input" placeholder="EAN/GTIN">
+                    </div>
+                    <div>
+                        <label class="input-label">NCM</label>
+                        <input type="text" name="ncm" value="{{ old('ncm', $produto->ncm) }}" maxlength="10" class="input" placeholder="00000000">
                     </div>
                 </div>
+
+                {{-- Unidade --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="input-label">Preço de Custo</label>
-                        <input type="number" name="preco_custo" value="{{ old('preco_custo', $produto->preco_custo) }}" step="0.01" min="0" class="input">
+                        <label class="input-label">Unidade</label>
+                        <select name="unidade" class="input">
+                            @foreach(['un','m','m²','m³','kg','g','L','mL','cx','pc','par','rolo','hr'] as $u)
+                                <option value="{{ $u }}" @selected(old('unidade', $produto->unidade ?? 'un') === $u)>{{ $u }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200 dark:border-gray-700">
+                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Preços</h3>
+
+                {{-- Preços com cálculo automático --}}
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="input-label">Preço de Compra</label>
+                        <input type="number" name="preco_custo" x-model.number="precoCusto"
+                               @input="calcularVenda"
+                               value="{{ old('preco_custo', $produto->preco_custo) }}"
+                               step="0.01" min="0" class="input" placeholder="0,00">
+                    </div>
+                    <div>
+                        <label class="input-label">Margem / Lucro (%)</label>
+                        <div class="flex gap-1">
+                            <input type="number" x-model.number="margem" @input="calcularVenda"
+                                   step="0.01" min="0" class="input" placeholder="0,00">
+                            <select x-model="tipoMargem" @change="calcularVenda" class="input w-20">
+                                <option value="porcento">%</option>
+                                <option value="valor">R$</option>
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <label class="input-label">Preço de Venda *</label>
-                        <input type="number" name="preco_venda" value="{{ old('preco_venda', $produto->preco_venda) }}" step="0.01" min="0" required class="input">
+                        <input type="number" name="preco_venda" x-model.number="precoVenda"
+                               value="{{ old('preco_venda', $produto->preco_venda) }}"
+                               step="0.01" min="0" required class="input" placeholder="0,00">
                     </div>
                 </div>
+
+                <hr class="border-gray-200 dark:border-gray-700">
+                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Estoque</h3>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Estoque Atual</label>
@@ -42,6 +91,7 @@
                         <input type="number" name="estoque_minimo" value="{{ old('estoque_minimo', $produto->estoque_minimo ?? 0) }}" step="0.001" min="0" class="input">
                     </div>
                 </div>
+
                 <label class="flex items-center gap-2 cursor-pointer text-sm">
                     <input type="hidden" name="ativo" value="0">
                     <input type="checkbox" name="ativo" value="1" @checked(old('ativo', $produto->ativo ?? true)) class="rounded text-yellow-500 focus:ring-yellow-500">
@@ -56,3 +106,24 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function produtoForm() {
+    return {
+        precoCusto: {{ old('preco_custo', $produto->preco_custo ?? 0) }},
+        precoVenda: {{ old('preco_venda', $produto->preco_venda ?? 0) }},
+        margem: 0,
+        tipoMargem: 'porcento',
+        calcularVenda() {
+            if (!this.precoCusto || !this.margem) return;
+            if (this.tipoMargem === 'porcento') {
+                this.precoVenda = parseFloat((this.precoCusto * (1 + this.margem / 100)).toFixed(2));
+            } else {
+                this.precoVenda = parseFloat((this.precoCusto + this.margem).toFixed(2));
+            }
+        }
+    }
+}
+</script>
+@endpush

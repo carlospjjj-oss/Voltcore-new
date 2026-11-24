@@ -61,10 +61,16 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="input-label">Garantia (meses)</label>
-                                <input type="number" name="garantia" value="{{ old('garantia', $os->garantia ?? 12) }}"
-                                       min="0" max="120" class="input">
+                                <label class="input-label">Garantia (dias)</label>
+                                <input type="number" name="garantia" value="{{ old('garantia', $os->garantia ?? 0) }}"
+                                       min="0" max="9999" class="input" placeholder="0">
                             </div>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Termo de Garantia</label>
+                            <input type="text" name="termo_garantia" value="{{ old('termo_garantia', $os->termo_garantia) }}"
+                                   class="input" placeholder="Descrição do termo de garantia...">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -107,14 +113,19 @@
                     <div class="card-header"><h3 class="font-semibold font-display">Descrição e Laudo</h3></div>
                     <div class="card-body space-y-4">
                         <div>
-                            <label class="input-label">Descrição do Serviço</label>
+                            <label class="input-label">Descrição do Produto/Serviço</label>
                             <textarea name="descricao" rows="4" class="input resize-none"
-                                      placeholder="Detalhe o serviço a ser executado...">{{ old('descricao', $os->descricao) }}</textarea>
+                                      placeholder="Detalhe o produto/serviço...">{{ old('descricao', $os->descricao) }}</textarea>
                         </div>
                         <div>
-                            <label class="input-label">Observações Internas</label>
+                            <label class="input-label">Defeito Relatado</label>
+                            <textarea name="defeito" rows="3" class="input resize-none"
+                                      placeholder="Descreva o defeito relatado pelo cliente...">{{ old('defeito', $os->defeito) }}</textarea>
+                        </div>
+                        <div>
+                            <label class="input-label">Observações</label>
                             <textarea name="observacoes" rows="3" class="input resize-none"
-                                      placeholder="Notas internas (não aparecem no PDF)...">{{ old('observacoes', $os->observacoes) }}</textarea>
+                                      placeholder="Observações gerais...">{{ old('observacoes', $os->observacoes) }}</textarea>
                         </div>
                         <div>
                             <label class="input-label">Laudo Técnico</label>

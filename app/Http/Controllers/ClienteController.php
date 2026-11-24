@@ -28,7 +28,13 @@ class ClienteController extends Controller
 
     public function store(ClienteRequest $request)
     {
-        $cliente = Cliente::create($request->validated());
+        $data = $request->validated();
+        if (!empty($data['senha_cliente'])) {
+            $data['senha_cliente'] = bcrypt($data['senha_cliente']);
+        } else {
+            unset($data['senha_cliente']);
+        }
+        $cliente = Cliente::create($data);
         return redirect()->route('clientes.show', $cliente)->with('success', 'Cliente cadastrado com sucesso!');
     }
 
@@ -47,7 +53,13 @@ class ClienteController extends Controller
 
     public function update(ClienteRequest $request, Cliente $cliente)
     {
-        $cliente->update($request->validated());
+        $data = $request->validated();
+        if (!empty($data['senha_cliente'])) {
+            $data['senha_cliente'] = bcrypt($data['senha_cliente']);
+        } else {
+            unset($data['senha_cliente']);
+        }
+        $cliente->update($data);
         return redirect()->route('clientes.show', $cliente)->with('success', 'Cliente atualizado!');
     }
 

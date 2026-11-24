@@ -21,8 +21,8 @@ class OrdemServico extends Model
         'data_inicial', 'data_final', 'data_instalacao',
         'data_inicio_instalacao', 'data_fim_instalacao',
         'equipamento', 'numero_serie', 'tensao',
-        'descricao', 'observacoes', 'laudo',
-        'garantia', 'garantia_ativa',
+        'descricao', 'defeito', 'observacoes', 'laudo',
+        'garantia', 'garantia_ativa', 'termo_garantia',
         'desconto', 'tipo_desconto',
         'finalizado', 'aprovado',
     ];

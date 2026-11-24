@@ -45,7 +45,10 @@ class ProdutoController extends Controller
     {
         return [
             'nome'           => 'required|string|max:200',
-            'codigo'         => 'nullable|string|max:50',
+            'descricao'      => 'nullable|string',
+            'codigo'         => 'nullable|string|max:60',
+            'cod_barra'      => 'nullable|string|max:60',
+            'ncm'            => 'nullable|string|max:10',
             'preco_custo'    => 'nullable|numeric|min:0',
             'preco_venda'    => 'required|numeric|min:0',
             'estoque'        => 'nullable|numeric|min:0',
