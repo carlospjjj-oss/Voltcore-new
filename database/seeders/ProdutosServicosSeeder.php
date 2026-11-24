@@ -56,7 +56,12 @@ class ProdutosServicosSeeder extends Seeder
         foreach ($produtos as $p) {
             Produto::updateOrCreate(
                 ['cod_barra' => $p['cod_barra']],
-                array_merge($p, ['unidade' => 'UN', 'ativo' => true, 'estoque_minimo' => 0])
+                array_merge($p, [
+                    'codigo'        => $p['cod_barra'],
+                    'unidade'       => 'UN',
+                    'ativo'         => true,
+                    'estoque_minimo'=> 0,
+                ])
             );
         }
 
