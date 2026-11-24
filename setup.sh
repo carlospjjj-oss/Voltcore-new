@@ -2,7 +2,7 @@
 # =============================================================================
 # VoltCore New — Setup Script para Ubuntu 22.04 / 24.04 / 26.10
 # Instala: PHP 8.3, Laravel 11, MySQL 8, Nginx, Redis, Node.js 20, Composer
-# Uso: sudo bash setup.sh
+# Uso: bash setup.sh  (execute como root)
 # =============================================================================
 
 set -e
@@ -19,7 +19,7 @@ error()  { echo -e "${RED}[✘]${NC} $1"; exit 1; }
 header() { echo -e "\n${BLUE}══════════════════════════════════════${NC}"; echo -e "${BLUE}  $1${NC}"; echo -e "${BLUE}══════════════════════════════════════${NC}"; }
 
 # Verificar root
-[ "$EUID" -ne 0 ] && error "Execute como root: sudo bash setup.sh"
+[ "$EUID" -ne 0 ] && error "Execute como root: bash setup.sh"
 
 # Configurações
 APP_NAME="voltcore"
