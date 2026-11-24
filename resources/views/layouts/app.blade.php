@@ -70,17 +70,17 @@
     <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-0.5">
         @php
             $navItems = [
-                ['route' => 'dashboard',       'icon' => 'chart-pie',       'label' => 'Dashboard'],
-                ['route' => 'clientes.index',  'icon' => 'users',           'label' => 'Clientes'],
-                ['route' => 'os.index',        'icon' => 'clipboard-list',  'label' => 'Ordens de Serviço'],
-                ['route' => 'execucoes.index', 'icon' => 'cog',             'label' => 'Execuções'],
-                ['route' => 'vendas.index',    'icon' => 'shopping-cart',   'label' => 'Vendas'],
-                ['route' => 'visitas.index',   'icon' => 'calendar',        'label' => 'Visitas'],
-                ['route' => 'financeiro.index','icon' => 'currency-dollar', 'label' => 'Financeiro'],
-                ['route' => 'produtos.index',  'icon' => 'cube',            'label' => 'Produtos'],
-                ['route' => 'servicos.index',  'icon' => 'wrench',          'label' => 'Serviços'],
-                ['route' => 'agenda',          'icon' => 'calendar-days',   'label' => 'Agenda'],
-                ['route' => 'relatorios.index','icon' => 'chart-bar',       'label' => 'Relatórios'],
+                ['route' => 'dashboard',         'icon' => 'chart-pie',       'label' => 'Dashboard'],
+                ['route' => 'clientes.index',    'icon' => 'users',           'label' => 'Cliente / Fornecedor'],
+                ['route' => 'visitas.index',     'icon' => 'calendar',        'label' => 'Visitas Técnicas'],
+                ['route' => 'vendas.index',      'icon' => 'shopping-cart',   'label' => 'Vendas'],
+                ['route' => 'os.index',          'icon' => 'clipboard-list',  'label' => 'Ordens de Serviço'],
+                ['route' => 'execucoes.index',   'icon' => 'cog',             'label' => 'Execução'],
+                ['route' => 'produtos.index',    'icon' => 'cube',            'label' => 'Produtos'],
+                ['route' => 'servicos.index',    'icon' => 'wrench',          'label' => 'Serviços'],
+                ['route' => 'garantias.index',   'icon' => 'document-text',   'label' => 'Termos de Garantias'],
+                ['route' => 'financeiro.index',  'icon' => 'currency-dollar', 'label' => 'Lançamentos'],
+                ['route' => 'cobrancas.index',   'icon' => 'bell',            'label' => 'Cobranças'],
             ];
         @endphp
 

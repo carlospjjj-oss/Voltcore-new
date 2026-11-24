@@ -16,6 +16,8 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\GarantiaController;
+use App\Http\Controllers\CobrancaController;
 
 // -------------------------------------------------------------------------
 // Autenticação
@@ -93,6 +95,12 @@ Route::middleware(['auth'])->group(function () {
     // Produtos e Serviços
     Route::resource('produtos', ProdutoController::class)->except(['show']);
     Route::resource('servicos', ServicoController::class)->except(['show']);
+
+    // Termos de Garantias
+    Route::get('/garantias', [GarantiaController::class, 'index'])->name('garantias.index');
+
+    // Cobranças
+    Route::get('/cobrancas', [CobrancaController::class, 'index'])->name('cobrancas.index');
 
     // Visitas Técnicas
     Route::prefix('visitas')->name('visitas.')->group(function () {
