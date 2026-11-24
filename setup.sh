@@ -1,12 +1,11 @@
 #!/bin/bash
 # =============================================================================
-# VoltCore New — Setup Script para Debian 13 (Trixie)
+# VoltCore New — Setup Script para Ubuntu 22.04 / 24.04 LTS
 # Instala: PHP 8.3, Laravel 11, MySQL 8, Nginx, Redis, Node.js 20, Composer
 # Uso: sudo bash setup.sh
 # =============================================================================
 
 set -e
-# v2 - Debian 13 Trixie
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -49,6 +48,7 @@ apt-get update -qq
 apt-get upgrade -y -qq
 apt-get install -y -qq \
     curl wget git unzip zip \
+    software-properties-common \
     apt-transport-https ca-certificates \
     gnupg lsb-release \
     build-essential \
