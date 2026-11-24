@@ -18,6 +18,7 @@ use App\Http\Controllers\PermissaoController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\GarantiaController;
 use App\Http\Controllers\CobrancaController;
+use App\Http\Controllers\ImportController;
 
 // -------------------------------------------------------------------------
 // Autenticação
@@ -131,6 +132,19 @@ Route::middleware(['auth'])->group(function () {
     // Produtos e Serviços
     Route::resource('produtos', ProdutoController::class)->except(['show']);
     Route::resource('servicos', ServicoController::class)->except(['show']);
+
+    // Importação
+    Route::prefix('importacao')->name('importacao.')->group(function () {
+        Route::get('/produtos',           [ImportController::class, 'produtosForm'])->name('produtos');
+        Route::get('/produtos/template',  [ImportController::class, 'produtosTemplate'])->name('produtos.template');
+        Route::post('/produtos/preview',  [ImportController::class, 'produtosPreview'])->name('produtos.preview');
+        Route::post('/produtos/confirmar',[ImportController::class, 'produtosConfirmar'])->name('produtos.confirmar');
+
+        Route::get('/clientes',           [ImportController::class, 'clientesForm'])->name('clientes');
+        Route::get('/clientes/template',  [ImportController::class, 'clientesTemplate'])->name('clientes.template');
+        Route::post('/clientes/preview',  [ImportController::class, 'clientesPreview'])->name('clientes.preview');
+        Route::post('/clientes/confirmar',[ImportController::class, 'clientesConfirmar'])->name('clientes.confirmar');
+    });
 
     // Termos de Garantias
     Route::get('/garantias', [GarantiaController::class, 'index'])->name('garantias.index');
