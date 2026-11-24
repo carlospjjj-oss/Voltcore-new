@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'VoltCore') — VoltCore CRM</title>
+    <title>@yield('title', 'Proton Mobilidade') — Proton Mobilidade CRM</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,13 +53,15 @@
     {{-- Logo --}}
     <div class="flex items-center px-4 h-16 border-b border-gray-800 flex-shrink-0">
         <div class="flex items-center gap-3 overflow-hidden min-w-0">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-900" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
-                </svg>
-            </div>
-            <span class="text-white font-bold text-lg font-display whitespace-nowrap lg:hidden xl:block" x-show="mobileOpen || sidebarOpen" x-transition>VoltCore</span>
-            <span class="hidden lg:block text-white font-bold text-lg font-display whitespace-nowrap overflow-hidden transition-all duration-300" :class="sidebarOpen ? 'max-w-xs opacity-100' : 'max-w-0 opacity-0'">VoltCore</span>
+            {{-- Logo compacto (ícone do átomo) quando sidebar recolhida --}}
+            <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
+                 class="flex-shrink-0 object-contain transition-all duration-300"
+                 :class="sidebarOpen ? 'w-0 opacity-0 hidden' : 'w-8 h-8 block'">
+            {{-- Logo completo quando sidebar aberta --}}
+            <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
+                 class="object-contain transition-all duration-300 overflow-hidden"
+                 :class="sidebarOpen ? 'h-10 max-w-[160px] opacity-100' : 'max-w-0 opacity-0 h-0'"
+                 x-show="mobileOpen || sidebarOpen" x-transition>
         </div>
         {{-- Fechar no mobile --}}
         <button @click="mobileOpen = false" class="ml-auto lg:hidden text-gray-400 hover:text-white p-1 rounded-lg transition-colors">
@@ -225,7 +227,7 @@
 
     {{-- Footer --}}
     <footer class="px-4 sm:px-6 py-3 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400 flex items-center justify-between">
-        <span>VoltCore CRM © {{ date('Y') }}</span>
+        <span>Proton Mobilidade © {{ date('Y') }}</span>
         <span class="hidden sm:inline">v2.0.0 — Laravel 11</span>
     </footer>
 </div>

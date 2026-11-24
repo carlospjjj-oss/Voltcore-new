@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — VoltCore CRM</title>
+    <title>Login — Proton Mobilidade CRM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css'])
@@ -13,12 +13,8 @@
 <div class="w-full max-w-sm">
     {{-- Logo --}}
     <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 mb-4 shadow-lg shadow-yellow-500/20">
-            <svg class="w-8 h-8 text-gray-900" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
-            </svg>
-        </div>
-        <h1 class="text-2xl font-bold text-white font-display">VoltCore CRM</h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
+             class="mx-auto h-24 w-auto mb-4 drop-shadow-lg">
         <p class="text-gray-400 text-sm mt-1">Entre com sua conta para continuar</p>
     </div>
 
@@ -66,7 +62,7 @@
         </form>
     </div>
 
-    <p class="text-center text-xs text-gray-600 mt-6">VoltCore CRM © {{ date('Y') }} — Proton Mobilidade</p>
+    <p class="text-center text-xs text-gray-600 mt-6">Proton Mobilidade © {{ date('Y') }}</p>
 </div>
 
 </body>
