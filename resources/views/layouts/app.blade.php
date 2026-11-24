@@ -156,11 +156,11 @@
             aside.style.width = sidebarOpen ? '16rem' : '4rem';
             main.style.paddingLeft = sidebarOpen ? '16rem' : '4rem';
             btn.style.left = sidebarOpen ? '16rem' : '4rem';
-            icon.style.transform = sidebarOpen ? 'rotate(180deg)' : '';
+            icon.style.transform = sidebarOpen ? 'rotate(180deg)' : 'rotate(0deg)';
             setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; btn.style.transition = ''; }, 350);
         ">
-    <svg id="sidebar-toggle-icon" style="width:14px;height:14px;" fill="none" stroke="#fff" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
+    <svg id="sidebar-toggle-icon" style="width:14px;height:14px;transition:transform 0.3s;" fill="none" stroke="#fff" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
     </svg>
 </button>
 <script>
@@ -171,7 +171,7 @@
     var btn = document.getElementById('sidebar-toggle-btn');
     var icon = document.getElementById('sidebar-toggle-icon');
     if (btn) btn.style.left = isOpen ? '16rem' : '4rem';
-    if (icon) icon.style.transform = isOpen ? 'rotate(180deg)' : '';
+    if (icon) icon.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
     // keep icon in sync with Alpine
     document.addEventListener('alpine:initialized', function() {
         var htmlEl = document.documentElement;
