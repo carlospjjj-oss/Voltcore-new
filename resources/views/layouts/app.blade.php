@@ -136,22 +136,6 @@
                 <p class="text-xs text-gray-500 truncate">{{ auth()->user()?->email }}</p>
             </div>
         </div>
-        {{-- Toggle desktop --}}
-        <button @click="
-            sidebarOpen = !sidebarOpen;
-            localStorage.setItem('sidebarOpen', sidebarOpen);
-            const aside = $el.closest('aside');
-            const main = document.getElementById('main-content');
-            aside.style.transition = 'width 0.3s ease';
-            main.style.transition = 'padding-left 0.3s ease';
-            setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
-        "
-                class="hidden lg:flex w-full items-center gap-2 px-3 py-2 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors text-sm">
-            <svg class="w-4 h-4 flex-shrink-0 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
-            </svg>
-            <span class="text-xs overflow-hidden transition-all duration-300 whitespace-nowrap" :class="sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'">Recolher menu</span>
-        </button>
     </div>
     {{-- Seta flutuante na borda --}}
     <button @click="
