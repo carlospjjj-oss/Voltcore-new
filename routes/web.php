@@ -74,11 +74,29 @@ Route::middleware(['auth'])->group(function () {
 
     // Execuções
     Route::prefix('execucoes')->name('execucoes.')->group(function () {
-        Route::get('/', [ExecucaoController::class, 'index'])->name('index');
+        Route::get('/',                  [ExecucaoController::class, 'index'])->name('index');
         Route::get('/{execucao}/editar', [ExecucaoController::class, 'edit'])->name('editar');
-        Route::put('/{execucao}', [ExecucaoController::class, 'update'])->name('update');
-        Route::post('/{execucao}/checklist', [ExecucaoController::class, 'checklist'])->name('checklist');
-        Route::post('/{execucao}/anexo', [ExecucaoController::class, 'anexo'])->name('anexo');
+        Route::put('/{execucao}',        [ExecucaoController::class, 'update'])->name('update');
+        Route::delete('/{execucao}',     [ExecucaoController::class, 'destroy'])->name('destroy');
+
+        // Produtos
+        Route::post('/{execucao}/produto',         [ExecucaoController::class, 'adicionarProduto'])->name('produto.add');
+        Route::delete('/{execucao}/produto',       [ExecucaoController::class, 'removerProduto'])->name('produto.remove');
+
+        // Serviços
+        Route::post('/{execucao}/servico',         [ExecucaoController::class, 'adicionarServico'])->name('servico.add');
+        Route::delete('/{execucao}/servico',       [ExecucaoController::class, 'removerServico'])->name('servico.remove');
+
+        // Anotações
+        Route::post('/{execucao}/anotacao',                   [ExecucaoController::class, 'adicionarAnotacao'])->name('anotacao.add');
+        Route::delete('/{execucao}/anotacao/{anotacao}',      [ExecucaoController::class, 'removerAnotacao'])->name('anotacao.remove');
+
+        // Anexos
+        Route::post('/{execucao}/anexo',           [ExecucaoController::class, 'uploadAnexo'])->name('anexo.upload');
+        Route::delete('/{execucao}/anexo/{anexo}', [ExecucaoController::class, 'removerAnexo'])->name('anexo.remove');
+
+        // Checklist
+        Route::post('/{execucao}/checklist',       [ExecucaoController::class, 'checklist'])->name('checklist');
     });
 
     // Vendas
