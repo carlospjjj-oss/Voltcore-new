@@ -57,8 +57,7 @@
         <div class="flex items-center gap-3 overflow-hidden min-w-0">
             {{-- Logo: menor quando sidebar recolhida, maior quando aberta --}}
             <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-                 class="object-contain transition-all duration-300 flex-shrink-0"
-                 :class="sidebarOpen ? 'h-8 w-auto' : 'h-6 w-6'">
+                 class="object-contain flex-shrink-0 h-8 w-auto">
         </div>
         {{-- Fechar no mobile --}}
         <button @click="mobileOpen = false" class="ml-auto lg:hidden text-gray-400 hover:text-white p-1 rounded-lg transition-colors">
