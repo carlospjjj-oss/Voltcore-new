@@ -21,6 +21,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
+    <style>
+        /* Suaviza transição entre páginas */
+        body { opacity: 1; transition: opacity 0.15s ease; }
+        body.navigating { opacity: 0; }
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased min-h-screen">
 
@@ -283,5 +288,23 @@ async function apiFetch(url, options = {}) {
 }
 </script>
 @stack('scripts')
+<script>
+    // Fade suave ao navegar entre páginas
+    document.addEventListener('click', function(e) {
+        const a = e.target.closest('a[href]');
+        if (!a) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('javascript') || a.target === '_blank') return;
+        if (a.hasAttribute('data-no-transition')) return;
+        e.preventDefault();
+        document.body.classList.add('navigating');
+        setTimeout(() => { window.location.href = href; }, 120);
+    });
+    // Garante que a página aparece ao voltar (cache do navegador)
+    window.addEventListener('pageshow', function() {
+        document.body.classList.remove('navigating');
+        document.body.style.opacity = '1';
+    });
+</script>
 </body>
 </html>
