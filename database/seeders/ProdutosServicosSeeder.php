@@ -53,29 +53,18 @@ class ProdutosServicosSeeder extends Seeder
             ['cod_barra'=>'245930366',    'nome'=>'PLACA DE SINALIZAÇÃO QUADRO DE EMERGÊNCIA SAVE -IT 41',                   'estoque'=>49,  'preco_custo'=>26.00,   'preco_venda'=>26.00],
         ];
 
-        // Pega o próximo código sequencial (máximo numérico existente + 1)
-        $proximoCodigo = (int) Produto::whereNotNull('codigo')
-            ->where('codigo', 'regexp', '^[0-9]+$')
-            ->max(\DB::raw('CAST(codigo AS UNSIGNED)'));
-        $proximoCodigo = $proximoCodigo + 1;
-
+        // Atribui código sequencial a todos (1, 2, 3...) na ordem do array
+        $seq = 1;
         foreach ($produtos as $p) {
-            $existe = Produto::where('cod_barra', $p['cod_barra'])->first();
-            if ($existe) {
-                // Atualiza sem mudar o codigo se já existe
-                $existe->update(array_merge($p, [
+            Produto::updateOrCreate(
+                ['cod_barra' => $p['cod_barra']],
+                array_merge($p, [
+                    'codigo'        => (string) $seq++,
                     'unidade'       => 'UN',
                     'ativo'         => true,
                     'estoque_minimo'=> 0,
-                ]));
-            } else {
-                Produto::create(array_merge($p, [
-                    'codigo'        => (string) $proximoCodigo++,
-                    'unidade'       => 'UN',
-                    'ativo'         => true,
-                    'estoque_minimo'=> 0,
-                ]));
-            }
+                ])
+            );
         }
 
         // SERVIÇOS
