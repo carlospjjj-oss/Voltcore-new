@@ -137,22 +137,26 @@
             </div>
         </div>
     </div>
-    {{-- Seta flutuante na borda --}}
-    <button @click="
+</aside>
+
+{{-- Seta recolher sidebar (desktop) --}}
+<button id="sidebar-toggle-btn"
+        class="hidden lg:flex fixed top-1/2 -translate-y-1/2 w-5 h-10 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-r-lg items-center justify-center text-white shadow-lg transition-all duration-300 z-40"
+        :style="'left:' + (sidebarOpen ? '16rem' : '4rem')"
+        @click="
             sidebarOpen = !sidebarOpen;
             localStorage.setItem('sidebarOpen', sidebarOpen);
-            const aside = $el.closest('aside');
+            const aside = document.querySelector('aside');
             const main = document.getElementById('main-content');
             aside.style.transition = 'width 0.3s ease';
             main.style.transition = 'padding-left 0.3s ease';
             setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
-        "
-        class="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-full items-center justify-center text-white shadow-lg transition-colors z-10">
-        <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-        </svg>
-    </button>
-</aside>
+        ">
+    <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'"
+         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+    </svg>
+</button>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
 <div class="flex flex-col min-h-screen"
