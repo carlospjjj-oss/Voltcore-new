@@ -10,10 +10,11 @@ class Cobranca extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'origem', 'cliente_id', 'venda_id', 'numero_nf',
-        'tipo_referencia', 'referencia', 'descricao',
+        'origem', 'cliente_id', 'lancamento_id', 'venda_id',
+        'numero_nf', 'tipo_referencia', 'referencia', 'descricao',
         'forma_pagamento', 'data_vencimento', 'valor',
         'status', 'data_pagamento', 'observacoes',
+        'asaas_id', 'link_pagamento', 'nosso_numero',
     ];
 
     protected $casts = [
@@ -30,6 +31,11 @@ class Cobranca extends Model
     public function venda()
     {
         return $this->belongsTo(Venda::class);
+    }
+
+    public function lancamento()
+    {
+        return $this->belongsTo(Lancamento::class);
     }
 
     public static function formasPagamento(): array
