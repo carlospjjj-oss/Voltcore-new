@@ -10,16 +10,16 @@
 </head>
 <body class="h-full bg-gray-950 flex items-center justify-center p-4">
 
-<div class="w-full max-w-sm">
+<div class="w-full max-w-xs">
     {{-- Logo --}}
-    <div class="text-center mb-8">
+    <div class="text-center mb-6">
         <img src="{{ asset('images/logo.png') }}" alt="Proton Mobilidade"
-             class="mx-auto h-16 w-auto mb-4 drop-shadow-lg">
-        <p class="text-gray-400 text-sm mt-1">Entre com sua conta para continuar</p>
+             class="mx-auto h-24 w-auto mb-3 drop-shadow-lg">
+        <p class="text-gray-400 text-sm">Entre com sua conta para continuar</p>
     </div>
 
     {{-- Card --}}
-    <div class="bg-gray-900 rounded-2xl border border-gray-800 p-8 shadow-xl">
+    <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 shadow-xl">
         @if($errors->any())
         <div class="mb-5 flex items-center gap-2 bg-red-900/30 border border-red-800 text-red-400 px-4 py-3 rounded-xl text-sm">
             <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -62,7 +62,10 @@
         </form>
     </div>
 
-    <p class="text-center text-xs text-gray-600 mt-6">Proton Mobilidade © {{ date('Y') }}</p>
+    <p class="text-center text-xs text-gray-600 mt-6">
+        © {{ date('Y') }} <a href="https://protonmobilidade.com.br" target="_blank"
+            class="text-gray-500 hover:text-orange-400 transition-colors">Proton Mobilidade</a>
+    </p>
 </div>
 
 </body>
