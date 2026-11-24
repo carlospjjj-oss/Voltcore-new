@@ -67,13 +67,13 @@
         </button>
 
         <form class="flex flex-wrap gap-2 flex-1" method="GET">
-            <select name="tipo" class="input w-28">
-                <option value="">Todos</option>
+            <select name="tipo" class="input w-32">
+                <option value="">Receita e Despesa</option>
                 <option value="entrada" @selected(request('tipo')==='entrada')>Receita</option>
                 <option value="saida"   @selected(request('tipo')==='saida')>Despesa</option>
             </select>
-            <select name="pago" class="input w-44">
-                <option value="">Todos (Pendente e Pago)</option>
+            <select name="pago" class="input w-36">
+                <option value="">Pago e Pendente</option>
                 <option value="1" @selected(request('pago')==='1')>Pagos</option>
                 <option value="0" @selected(request('pago')==='0')>Pendentes</option>
             </select>
@@ -229,7 +229,7 @@
     <div x-show="modalAdd" x-cloak
          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
          @keydown.escape.window="modalAdd = false">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
              x-data="{
                 valor: '',
                 desconto: '0.00',
@@ -290,19 +290,19 @@
                 </div>
 
                 {{-- Valor + Desconto + Val.Desc --}}
-                <div class="grid grid-cols-3 gap-3">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem">
                     <div>
                         <label class="input-label">Valor <span class="text-red-500">*</span></label>
                         <input type="number" name="valor" required step="0.01" min="0.01"
                                x-model="valor" class="input" placeholder="0,00">
                     </div>
                     <div>
-                        <label class="input-label">Desconto</label>
+                        <label class="input-label">Desconto (R$)</label>
                         <div class="flex gap-1">
                             <input type="number" name="desconto" step="0.01" min="0"
-                                   x-model="desconto" class="input" placeholder="em R$">
-                            <button type="button" @click="aplicarDesconto()"
-                                    class="px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg flex-shrink-0">
+                                   x-model="desconto" class="input min-w-0">
+                            <button type="button"
+                                    class="px-2 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg flex-shrink-0 whitespace-nowrap">
                                 Aplicar
                             </button>
                         </div>
@@ -314,7 +314,7 @@
                 </div>
 
                 {{-- Vencimento + Parcelas + Recebido --}}
-                <div class="grid grid-cols-3 gap-3 items-end">
+                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:0.75rem;align-items:end">
                     <div>
                         <label class="input-label">Data Vencimento <span class="text-red-500">*</span></label>
                         <input type="date" name="data_vencimento" required value="{{ date('Y-m-d') }}" class="input">
