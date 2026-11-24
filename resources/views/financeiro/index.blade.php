@@ -229,7 +229,7 @@
     <div x-show="modalAdd" x-cloak
          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
          @keydown.escape.window="modalAdd = false">
-        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
              x-data="{
                 valor: '',
                 desconto: '0.00',
@@ -290,7 +290,7 @@
                 </div>
 
                 {{-- Valor + Desconto + Val.Desc --}}
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem">
+                <div style="display:grid!important;grid-template-columns:1fr 1fr 1fr;gap:0.75rem">
                     <div>
                         <label class="input-label">Valor <span class="text-red-500">*</span></label>
                         <input type="number" name="valor" required step="0.01" min="0.01"
@@ -314,7 +314,7 @@
                 </div>
 
                 {{-- Vencimento + Parcelas + Recebido --}}
-                <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:0.75rem;align-items:end">
+                <div style="display:grid!important;grid-template-columns:1fr 1fr auto;gap:0.75rem;align-items:end">
                     <div>
                         <label class="input-label">Data Vencimento <span class="text-red-500">*</span></label>
                         <input type="date" name="data_vencimento" required value="{{ date('Y-m-d') }}" class="input">

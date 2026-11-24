@@ -179,10 +179,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/agenda/eventos', [AgendaController::class, 'eventos'])->name('agenda.eventos');
 
     // Administração
-    Route::middleware(['role:admin'])->group(function () {
-        Route::resource('usuarios', UsuarioController::class)->except(['show']);
-        Route::resource('permissoes', PermissaoController::class)->except(['show']);
-    });
+    Route::resource('usuarios', UsuarioController::class)->except(['show']);
+    Route::resource('permissoes', PermissaoController::class)->except(['show']);
 
 });
 
