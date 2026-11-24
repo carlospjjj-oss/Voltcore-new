@@ -12,7 +12,7 @@
                     <label class="input-label">Nome *</label>
                     <input type="text" name="nome" value="{{ old('nome', $produto->nome) }}" required class="input">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Código</label>
                         <input type="text" name="codigo" value="{{ old('codigo', $produto->codigo) }}" class="input" placeholder="SKU">
@@ -22,7 +22,7 @@
                         <input type="text" name="unidade" value="{{ old('unidade', $produto->unidade ?? 'un') }}" class="input" placeholder="un, m, m², kg">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Preço de Custo</label>
                         <input type="number" name="preco_custo" value="{{ old('preco_custo', $produto->preco_custo) }}" step="0.01" min="0" class="input">
@@ -32,7 +32,7 @@
                         <input type="number" name="preco_venda" value="{{ old('preco_venda', $produto->preco_venda) }}" step="0.01" min="0" required class="input">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Estoque Atual</label>
                         <input type="number" name="estoque" value="{{ old('estoque', $produto->estoque ?? 0) }}" step="0.001" min="0" class="input">

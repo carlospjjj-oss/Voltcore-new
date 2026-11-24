@@ -139,7 +139,7 @@
             <h3 class="font-semibold font-display text-lg mb-4">Novo Lançamento</h3>
             <form method="POST" action="{{ route('financeiro.store') }}" class="space-y-4">
                 @csrf
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="input-label">Descrição *</label>
                         <input type="text" name="descricao" required class="input" placeholder="Ex: Pagamento OS #123">

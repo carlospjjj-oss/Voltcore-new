@@ -30,7 +30,7 @@
                             @error('cliente_id')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Status *</label>
                                 <select name="status" required class="input">
@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Responsável</label>
                                 <select name="engenheiro_id" class="input">
@@ -67,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Data Inicial</label>
                                 <input type="date" name="data_inicial" value="{{ old('data_inicial', $os->data_inicial?->format('Y-m-d')) }}" class="input">
@@ -85,7 +85,7 @@
                 <div class="card">
                     <div class="card-header"><h3 class="font-semibold font-display">Equipamento</h3></div>
                     <div class="card-body space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Equipamento / Produto</label>
                                 <input type="text" name="equipamento" value="{{ old('equipamento', $os->equipamento) }}" class="input" placeholder="Ex: Painel Solar 550W">

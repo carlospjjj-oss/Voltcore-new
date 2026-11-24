@@ -18,7 +18,7 @@
                 <div class="card">
                     <div class="card-header"><h3 class="font-semibold font-display">Dados da Venda</h3></div>
                     <div class="card-body space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Cliente *</label>
                                 <select name="cliente_id" required class="input">
@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">OS Vinculada</label>
                                 <input type="number" name="os_id" value="{{ old('os_id', $venda->os_id ?? request('os_id')) }}"
@@ -205,7 +205,7 @@
                     </template>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <label class="input-label">Quantidade</label>
                     <input type="number" x-model="itemQtd" step="0.001" min="0.001" class="input">
@@ -241,7 +241,7 @@
                     </template>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <label class="input-label">Quantidade</label>
                     <input type="number" x-model="itemQtd" step="0.001" min="0.001" class="input">

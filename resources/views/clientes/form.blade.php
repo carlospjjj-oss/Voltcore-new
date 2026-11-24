@@ -43,7 +43,7 @@
                 </div>
 
                 {{-- Documento --}}
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label"><span x-text="pessoaFisica == '1' ? 'CPF' : 'CNPJ'"></span></label>
                         <input type="text" name="documento" value="{{ old('documento', $cliente->documento) }}"
@@ -58,7 +58,7 @@
                 </div>
 
                 {{-- Contato --}}
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Telefone</label>
                         <input type="text" name="telefone" value="{{ old('telefone', $cliente->telefone) }}"
@@ -75,7 +75,7 @@
                 <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Endereço</h3>
 
                 {{-- CEP com auto-preenchimento --}}
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
                         <label class="input-label">CEP</label>
                         <input type="text" name="cep" value="{{ old('cep', $cliente->cep) }}"
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div>
                         <label class="input-label">Número</label>
                         <input type="text" name="numero" value="{{ old('numero', $cliente->numero) }}"
@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
                         <label class="input-label">Bairro</label>
                         <input type="text" name="bairro" value="{{ old('bairro', $cliente->bairro) }}"

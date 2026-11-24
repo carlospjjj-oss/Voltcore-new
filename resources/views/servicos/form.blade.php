@@ -12,7 +12,7 @@
                     <label class="input-label">Nome *</label>
                     <input type="text" name="nome" value="{{ old('nome', $servico->nome) }}" required class="input">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Preço *</label>
                         <input type="number" name="preco" value="{{ old('preco', $servico->preco) }}" step="0.01" min="0" required class="input">

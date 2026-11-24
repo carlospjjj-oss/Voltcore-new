@@ -19,7 +19,7 @@
                     </select>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Data *</label>
                         <input type="date" name="data_visita" value="{{ old('data_visita', $visita->data_visita?->format('Y-m-d')) }}" required class="input">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="input-label">Tipo</label>
                         <input type="text" name="tipo" value="{{ old('tipo', $visita->tipo) }}" class="input" placeholder="Ex: Instalação, Manutenção">

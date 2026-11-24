@@ -58,7 +58,7 @@
                     <div class="card-header"><h3 class="font-semibold font-display">Dados da Execução</h3></div>
                     <div class="card-body space-y-4">
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Status *</label>
                                 <select name="status" required class="input">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="input-label">Data Prevista</label>
                                 <input type="date" name="data_prevista"
@@ -100,7 +100,7 @@
                 <div class="card">
                     <div class="card-header"><h3 class="font-semibold font-display">Checklist de Campo</h3></div>
                     <div class="card-body">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach([
                                 ['check_chegada',    'Chegada no local confirmada', 'Registre a chegada ao endereço do cliente'],
                                 ['check_instalacao', 'Instalação concluída',        'Equipamentos instalados e fixados'],
