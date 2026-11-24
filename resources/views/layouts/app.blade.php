@@ -45,7 +45,7 @@
 
 {{-- =================== SIDEBAR =================== --}}
 <aside
-    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 -translate-x-full lg:translate-x-0"
+    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 dark:bg-gray-950 border-r border-gray-800 -translate-x-full lg:translate-x-0 overflow-visible"
     :class="{
         'translate-x-0': mobileOpen,
         '-translate-x-full lg:translate-x-0': !mobileOpen
@@ -137,12 +137,10 @@
             </div>
         </div>
     </div>
-</aside>
 
-{{-- Seta recolher sidebar (desktop) --}}
-<button id="sidebar-toggle-btn"
-        class="hidden lg:flex fixed top-1/2 -translate-y-1/2 w-5 h-10 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-r-lg items-center justify-center text-white shadow-lg transition-all duration-300 z-40"
-        :style="'left:' + (sidebarOpen ? '16rem' : '4rem')"
+    {{-- Seta recolher sidebar (desktop) — grudada na borda direita do aside --}}
+    <button
+        class="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-10 bg-gray-700 hover:bg-yellow-500 border border-gray-600 rounded-r-lg items-center justify-center text-white shadow-lg transition-colors z-50"
         @click="
             sidebarOpen = !sidebarOpen;
             localStorage.setItem('sidebarOpen', sidebarOpen);
@@ -152,11 +150,12 @@
             main.style.transition = 'padding-left 0.3s ease';
             setTimeout(() => { aside.style.transition = ''; main.style.transition = ''; }, 350);
         ">
-    <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'"
-         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-    </svg>
-</button>
+        <svg class="w-3 h-3 transition-transform duration-300" :class="sidebarOpen ? '' : 'rotate-180'"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
+</aside>
 
 {{-- =================== CONTEÚDO PRINCIPAL =================== --}}
 <div class="flex flex-col min-h-screen"
