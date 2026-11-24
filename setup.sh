@@ -48,7 +48,6 @@ apt-get update -qq
 apt-get upgrade -y -qq
 apt-get install -y -qq \
     curl wget git unzip zip \
-    software-properties-common \
     apt-transport-https ca-certificates \
     gnupg lsb-release \
     build-essential \
