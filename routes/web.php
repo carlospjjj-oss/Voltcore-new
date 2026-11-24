@@ -1,0 +1,137 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\OrdemServicoController;
+use App\Http\Controllers\ExecucaoController;
+use App\Http\Controllers\VendaController;
+use App\Http\Controllers\FinanceiroController;
+use App\Http\Controllers\LancamentoController;
+use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\VisitaTecnicaController;
+use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\PermissaoController;
+
+// -------------------------------------------------------------------------
+// Autenticação
+// -------------------------------------------------------------------------
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Auth\AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
+});
+
+Route::post('/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+// -------------------------------------------------------------------------
+// App — requer autenticação
+// -------------------------------------------------------------------------
+Route::middleware(['auth'])->group(function () {
+
+    // Dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Clientes
+    Route::resource('clientes', ClienteController::class)->except(['show']);
+    Route::get('clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+    Route::get('clientes/{cliente}/historico', [ClienteController::class, 'historico'])->name('clientes.historico');
+
+    // Ordens de Serviço
+    Route::prefix('os')->name('os.')->group(function () {
+        Route::get('/', [OrdemServicoController::class, 'index'])->name('index');
+        Route::get('/nova', [OrdemServicoController::class, 'create'])->name('create');
+        Route::post('/', [OrdemServicoController::class, 'store'])->name('store');
+        Route::get('/{os}/editar', [OrdemServicoController::class, 'edit'])->name('editar');
+        Route::put('/{os}', [OrdemServicoController::class, 'update'])->name('update');
+        Route::delete('/{os}', [OrdemServicoController::class, 'destroy'])->name('destroy');
+        Route::post('/{os}/finalizar', [OrdemServicoController::class, 'finalizar'])->name('finalizar');
+        Route::get('/{os}/pdf', [OrdemServicoController::class, 'pdf'])->name('pdf');
+    });
+
+    // Execuções
+    Route::prefix('execucoes')->name('execucoes.')->group(function () {
+        Route::get('/', [ExecucaoController::class, 'index'])->name('index');
+        Route::get('/{execucao}/editar', [ExecucaoController::class, 'edit'])->name('editar');
+        Route::put('/{execucao}', [ExecucaoController::class, 'update'])->name('update');
+        Route::post('/{execucao}/checklist', [ExecucaoController::class, 'checklist'])->name('checklist');
+        Route::post('/{execucao}/anexo', [ExecucaoController::class, 'anexo'])->name('anexo');
+    });
+
+    // Vendas
+    Route::prefix('vendas')->name('vendas.')->group(function () {
+        Route::get('/', [VendaController::class, 'index'])->name('index');
+        Route::get('/nova', [VendaController::class, 'create'])->name('create');
+        Route::post('/', [VendaController::class, 'store'])->name('store');
+        Route::get('/{venda}/editar', [VendaController::class, 'edit'])->name('editar');
+        Route::put('/{venda}', [VendaController::class, 'update'])->name('update');
+        Route::get('/{venda}/pdf', [VendaController::class, 'pdf'])->name('pdf');
+
+        // Itens AJAX
+        Route::post('/{venda}/produto', [VendaController::class, 'adicionarProduto'])->name('produto.add');
+        Route::delete('/{venda}/produto/{item}', [VendaController::class, 'removerProduto'])->name('produto.remove');
+        Route::post('/{venda}/servico', [VendaController::class, 'adicionarServico'])->name('servico.add');
+        Route::delete('/{venda}/servico/{item}', [VendaController::class, 'removerServico'])->name('servico.remove');
+        Route::post('/{venda}/desconto', [VendaController::class, 'aplicarDesconto'])->name('desconto');
+        Route::post('/{venda}/desconto-servico', [VendaController::class, 'aplicarDescontoServico'])->name('desconto.servico');
+    });
+
+    // Financeiro
+    Route::prefix('financeiro')->name('financeiro.')->group(function () {
+        Route::get('/', [FinanceiroController::class, 'index'])->name('index');
+        Route::get('/lancamentos', [LancamentoController::class, 'index'])->name('lancamentos');
+        Route::post('/lancamentos', [LancamentoController::class, 'store'])->name('lancamentos.store');
+        Route::put('/lancamentos/{lancamento}', [LancamentoController::class, 'update'])->name('lancamentos.update');
+        Route::delete('/lancamentos/{lancamento}', [LancamentoController::class, 'destroy'])->name('lancamentos.destroy');
+        Route::post('/lancamentos/{lancamento}/baixar', [LancamentoController::class, 'baixar'])->name('lancamentos.baixar');
+        Route::get('/relatorio', [FinanceiroController::class, 'relatorio'])->name('relatorio');
+    });
+
+    // Produtos e Serviços
+    Route::resource('produtos', ProdutoController::class)->except(['show']);
+    Route::resource('servicos', ServicoController::class)->except(['show']);
+
+    // Visitas Técnicas
+    Route::prefix('visitas')->name('visitas.')->group(function () {
+        Route::get('/', [VisitaTecnicaController::class, 'index'])->name('index');
+        Route::get('/nova', [VisitaTecnicaController::class, 'create'])->name('create');
+        Route::post('/', [VisitaTecnicaController::class, 'store'])->name('store');
+        Route::get('/{visita}/editar', [VisitaTecnicaController::class, 'edit'])->name('editar');
+        Route::put('/{visita}', [VisitaTecnicaController::class, 'update'])->name('update');
+        Route::delete('/{visita}', [VisitaTecnicaController::class, 'destroy'])->name('destroy');
+    });
+
+    // Relatórios
+    Route::prefix('relatorios')->name('relatorios.')->group(function () {
+        Route::get('/', [RelatorioController::class, 'index'])->name('index');
+        Route::get('/os', [RelatorioController::class, 'os'])->name('os');
+        Route::get('/financeiro', [RelatorioController::class, 'financeiro'])->name('financeiro');
+        Route::get('/clientes', [RelatorioController::class, 'clientes'])->name('clientes');
+        Route::get('/execucoes', [RelatorioController::class, 'execucoes'])->name('execucoes');
+    });
+
+    // Agenda / Calendário
+    Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda');
+    Route::get('/agenda/eventos', [AgendaController::class, 'eventos'])->name('agenda.eventos');
+
+    // Administração
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('usuarios', UsuarioController::class)->except(['show']);
+        Route::resource('permissoes', PermissaoController::class)->except(['show']);
+    });
+
+});
+
+// -------------------------------------------------------------------------
+// API interna (AJAX)
+// -------------------------------------------------------------------------
+Route::middleware(['auth'])->prefix('api/v1')->name('api.')->group(function () {
+    Route::get('/clientes/buscar', [ClienteController::class, 'buscar'])->name('clientes.buscar');
+    Route::get('/produtos/buscar', [ProdutoController::class, 'buscar'])->name('produtos.buscar');
+    Route::get('/servicos/buscar', [ServicoController::class, 'buscar'])->name('servicos.buscar');
+    Route::get('/cep/{cep}', fn($cep) => \App\Services\CepService::buscar($cep))->name('cep');
+});
